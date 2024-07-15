@@ -4,6 +4,21 @@ namespace SunamoGetFolders;
 
 public class FSGetFolders
 {
+    public static List<string> GetFoldersWhichContainsFiles(string d, string masc, SearchOption topDirectoryOnly)
+    {
+        var f = Directory.GetDirectories(d, "*", SearchOption.TopDirectoryOnly);
+        List<string> result = new List<string>();
+        foreach (var item in f)
+        {
+            var files = Directory.GetFiles(item, masc, topDirectoryOnly).ToList();
+            if (files.Count != 0)
+            {
+                result.Add(item);
+            }
+        }
+        result = result.ConvertAll(d => d + "\\");
+        return result;
+    }
     public static List<string> GetFolders(string folder, SearchOption so)
     {
         return GetFolders(folder, AllStrings.asterisk, so);
@@ -203,18 +218,5 @@ public class FSGetFolders
         }
         return list;
     }
-    public static List<string> GetFoldersWhichContainsFiles(string d, string masc, SearchOption topDirectoryOnly)
-    {
-        var f = GetFolders(d);
-        List<string> result = new List<string>();
-        foreach (var item in f)
-        {
-            var files = FSGetFiles.GetFiles(item, masc, topDirectoryOnly);
-            if (files.Count != 0)
-            {
-                result.Add(item);
-            }
-        }
-        return result;
-    }
+
 }
