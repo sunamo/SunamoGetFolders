@@ -1,4 +1,5 @@
 namespace SunamoGetFolders._sunamo.SunamoFileSystem;
+
 internal class FSND
 {
     internal static string WithEndSlash(string v)

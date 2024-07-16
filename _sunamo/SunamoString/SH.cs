@@ -1,4 +1,5 @@
 namespace SunamoGetFolders._sunamo.SunamoString;
+
 internal class SH
 {
     internal static void FirstCharUpper(ref string nazevPP)

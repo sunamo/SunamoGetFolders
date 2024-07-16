@@ -1,4 +1,5 @@
 namespace SunamoGetFolders._sunamo.SunamoCollections;
+
 internal class CA
 {
     internal static void RemoveWhichContains(List<string> files1, string item, bool wildcard, Func<string, string, bool> WildcardIsMatch)

@@ -1,3 +1,4 @@
+using SunamoGetFolders._sunamo;
 using WildcardMatch;
 
 namespace SunamoGetFolders;
@@ -122,7 +123,7 @@ public class FSGetFolders
         try
         {
             folders = Directory.GetDirectories(folder).ToList();
-            folders = CAChangeContent.ChangeContent0(null, folders, FSND.WithEndSlash);
+            folders = CAChangeContent.ChangeContent0(null, folders, FS.WithEndSlash);
             //#if DEBUG
             //            if (e.writeToDebugEveryLoadedFolder)
             //            {
