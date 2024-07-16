@@ -1,7 +1,7 @@
-using SunamoGetFolders._sunamo;
-using WildcardMatch;
 
 namespace SunamoGetFolders;
+using SunamoGetFolders._sunamo;
+using WildcardMatch;
 
 public class FSGetFolders
 {

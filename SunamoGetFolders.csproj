@@ -21,6 +21,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="_sunamo\SunamoEnums\Enums\" />
+    <Folder Include="_sunamo\SunamoString\" />
     <None Include="readme.md" Pack="True" PackagePath="." />
   </ItemGroup>
   <ItemGroup>
