@@ -15,3 +15,4 @@ global using SunamoGetFolders._sunamo.SunamoExceptions.OnlyInSE;
 global using System.Diagnostics;
 global using System.Net;
 global using System.Text.RegularExpressions;
+global using SunamoGetFolders._sunamo.SunamoCollections;

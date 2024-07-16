@@ -1,4 +1,4 @@
-//namespace SunamoGetFolders._sunamo.SunamoCollections;
+namespace SunamoGetFolders._sunamo.SunamoCollections;
 
 internal class CA
 {

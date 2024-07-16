@@ -1,4 +1,4 @@
-//namespace SunamoGetFolders._sunamo.SunamoExceptions._AddedToAllCsproj;
+namespace SunamoGetFolders._sunamo;
 
 internal class SH
 {
