@@ -1,21 +1,18 @@
 namespace SunamoGetFolders._public.SunamoArgs;
 
-
-
 public class GetFilesArgsGetFolders : GetFilesBaseArgsGetFolders
 {
+    public bool _trimA1AndLeadingBs = false;
 
     public bool _trimExt = false;
-    public bool _trimA1AndLeadingBs = false;
-    public List<string> excludeFromLocationsCOntains = new List<string>();
+    public bool byDateOfLastModifiedAsc = false;
     public bool dontIncludeNewest = false;
-    public bool throwEx = false;
+    public List<string> excludeFromLocationsCOntains = new();
 
 
     public Action<List<string>> excludeWithMethod = null;
-    public bool byDateOfLastModifiedAsc = false;
     public Func<string, DateTime?> LastModifiedFromFn;
-
+    public bool throwEx = false;
 
 
     public bool useMascFromExtension = false;

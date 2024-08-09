@@ -1,5 +1,5 @@
-
 namespace SunamoGetFolders._sunamo;
+
 internal class FS
 {
     internal static string WithEndSlash(string v)
@@ -14,10 +14,7 @@ internal class FS
     /// <returns></returns>
     internal static string WithEndSlash(ref string v)
     {
-        if (v != string.Empty)
-        {
-            v = v.TrimEnd(AllChars.bs) + AllChars.bs;
-        }
+        if (v != string.Empty) v = v.TrimEnd(AllChars.bs) + AllChars.bs;
 
         SH.FirstCharUpper(ref v);
         return v;
@@ -28,37 +25,30 @@ internal class FS
     {
         CreateFoldersPsysicallyUnlessThere(Path.GetDirectoryName(nad));
     }
+
     internal static void CreateFoldersPsysicallyUnlessThere(string nad)
     {
         ThrowEx.IsNullOrEmpty("nad", nad);
         ThrowEx.IsNotWindowsPathFormat("nad", nad);
-        if (Directory.Exists(nad))
+        if (Directory.Exists(nad)) return;
+        var slozkyKVytvoreni = new List<string>
         {
-            return;
-        }
-        List<string> slozkyKVytvoreni = new List<string>
-{
-nad
-};
+            nad
+        };
         while (true)
         {
             nad = Path.GetDirectoryName(nad);
-            
-            if (Directory.Exists(nad))
-            {
-                break;
-            }
-            string kopia = nad;
+
+            if (Directory.Exists(nad)) break;
+            var kopia = nad;
             slozkyKVytvoreni.Add(kopia);
         }
+
         slozkyKVytvoreni.Reverse();
-        foreach (string item in slozkyKVytvoreni)
+        foreach (var item in slozkyKVytvoreni)
         {
-            string folder = item;
-            if (!Directory.Exists(folder))
-            {
-                Directory.CreateDirectory(folder);
-            }
+            var folder = item;
+            if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
         }
     }
 }

@@ -14,10 +14,7 @@ internal class FSND
     /// <returns></returns>
     internal static string WithEndSlash(ref string v)
     {
-        if (v != string.Empty)
-        {
-            v = v.TrimEnd(AllChars.bs) + AllChars.bs;
-        }
+        if (v != string.Empty) v = v.TrimEnd(AllChars.bs) + AllChars.bs;
 
         FirstCharUpper(ref v);
         return v;
@@ -30,12 +27,9 @@ internal class FSND
 
     internal static string FirstCharUpper(string nazevPP)
     {
-        if (nazevPP.Length == 1)
-        {
-            return nazevPP.ToUpper();
-        }
+        if (nazevPP.Length == 1) return nazevPP.ToUpper();
 
-        string sb = nazevPP.Substring(1);
+        var sb = nazevPP.Substring(1);
         return nazevPP[0].ToString().ToUpper() + sb;
     }
 }
