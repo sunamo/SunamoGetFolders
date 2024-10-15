@@ -1,7 +1,6 @@
+namespace SunamoGetFolders;
 using SunamoGetFolders._sunamo;
 using WildcardMatch;
-
-namespace SunamoGetFolders;
 
 public class FSGetFolders
 {
@@ -111,7 +110,7 @@ public class FSGetFolders
         }
         catch (Exception ex)
         {
-            if (e.throwEx) ThrowEx.DummyNotThrow(ex);
+            if (e.throwEx) ThrowEx.Custom(ex);
 
             // Not throw exception, it's probably Access denied  on Documents and Settings etc
             //throw new Exception("GetFoldersEveryFolder with path: " + folder, ex);
@@ -135,7 +134,7 @@ public class FSGetFolders
         }
         catch (Exception ex)
         {
-            ThrowEx.DummyNotThrow(ex);
+            ThrowEx.Custom(ex);
             // Not throw exception, it's probably Access denied  on Documents and Settings etc
             //throw new Exception("GetFoldersEveryFolder with path: " + folder, ex);
         }
