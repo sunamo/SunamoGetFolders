@@ -14,7 +14,7 @@ internal class FS
     /// <returns></returns>
     internal static string WithEndSlash(ref string v)
     {
-        if (v != string.Empty) v = v.TrimEnd(AllChars.bs) + AllChars.bs;
+        if (v != string.Empty) v = v.TrimEnd('\\') + '\\';
 
         SH.FirstCharUpper(ref v);
         return v;

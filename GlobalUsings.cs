@@ -7,7 +7,7 @@ global using SunamoGetFolders.Args;
 global using SunamoGetFolders._public.SunamoArgs;
 global using SunamoGetFolders._sunamo.SunamoArgs;
 global using SunamoGetFolders._sunamo.SunamoCollectionsChangeContent;
-global using SunamoGetFolders._sunamo.SunamoValues;
+global using SunamoGetFolders;
 global using SunamoGetFolders._sunamo.SunamoExceptions;
 global using System.Diagnostics;
 global using System.Text.RegularExpressions;

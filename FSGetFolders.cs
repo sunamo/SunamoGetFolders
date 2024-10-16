@@ -20,14 +20,14 @@ public class FSGetFolders
 
     public static List<string> GetFolders(string folder, SearchOption so)
     {
-        return GetFolders(folder, AllStrings.asterisk, so);
+        return GetFolders(folder, "*", so);
     }
 
     public static List<string> GetFolders(string v, string contains)
     {
         var folders = GetFolders(v);
-        for (var i = 0; i < folders.Count; i++) folders[i] = folders[i].TrimEnd(AllChars.bs);
-        //CA.TrimEnd(folders, new char[] { AllChars.bs });
+        for (var i = 0; i < folders.Count; i++) folders[i] = folders[i].TrimEnd('\\');
+        //CA.TrimEnd(folders, new char[] { '\\' });
         for (var i = folders.Count - 1; i >= 0; i--)
             if (!Regex.IsMatch(Path.GetFileName(folders[i]), contains))
                 folders.RemoveAt(i);
@@ -66,7 +66,7 @@ public class FSGetFolders
         {
             for (var i = 0; i < dirs.Count; i++) dirs[i] = SH.FirstCharUpper(dirs[i]);
             //CA.Replace(dirs, folder, string.Empty);
-            //CA.TrimEnd(dirs, new Char[] { AllChars.bs });
+            //CA.TrimEnd(dirs, new Char[] { '\\' });
             for (var i = 0; i < dirs.Count; i++) dirs[i] = dirs[i].Replace(folder, string.Empty);
             for (var i = 0; i < dirs.Count; i++) dirs[i] = dirs[i].TrimEnd('\\');
         }
@@ -76,7 +76,7 @@ public class FSGetFolders
             // Must have backslash on end - is folder
             //if (CA.PostfixIfNotEnding != null)
             //{
-            //    CA.PostfixIfNotEnding(@"\", dirs);
+            //    CA.PostfixIfNotEnding(@"\"", dirs);
             //}
         }
 
@@ -165,9 +165,9 @@ public class FSGetFolders
             }
 
         if (e._trimA1AndLeadingBs)
-            //list = CAChangeContent.ChangeContent0(null, list, d => d = d.Replace(folder, "").TrimStart(AllChars.bs));
+            //list = CAChangeContent.ChangeContent0(null, list, d => d = d.Replace(folder, "").TrimStart('\\'));
             for (var i = 0; i < list.Count; i++)
-                list[i] = list[i].Replace(folder, "").TrimStart(AllChars.bs);
+                list[i] = list[i].Replace(folder, "").TrimStart('\\');
         if (e.excludeFromLocationsCOntains != null)
             // I want to find files recursively
             foreach (var item in e.excludeFromLocationsCOntains)
