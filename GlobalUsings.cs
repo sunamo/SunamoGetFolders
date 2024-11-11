@@ -14,3 +14,8 @@ global using SunamoGetFolders._sunamo.SunamoCollections;
 global using System.Reflection;
 global using System.Net;
 global using System.Diagnostics.CodeAnalysis;
+global using SunamoGetFolders;
+global using SunamoGetFolders._sunamo;
+global using SunamoGetFolders._sunamo.SunamoFileSystem;
+global using SunamoGetFolders._sunamo.SunamoGetFiles;
+global using SunamoGetFolders._sunamo.SunamoRegex;
