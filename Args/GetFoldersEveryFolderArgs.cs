@@ -7,6 +7,12 @@ public class GetFoldersEveryFolderArgs : GetFilesArgsGetFolders
     /// </summary>
     public bool _trimA1AndLeadingBs;
 
+    /// <summary>
+    /// Hodí se při velkých složkách např. E:\vs
+    /// Je zbytečné vypisovat miliony složek pro každou ale co x sekund aby bylo vidět že se něco děje
+    /// </summary>
+
+
     public List<string> excludeFromLocationsCOntains = null;
 
     // nevím k čemu to je ale zdá se nesmysl, ověřovat můžu přes excludeFromLocationsCOntains != null

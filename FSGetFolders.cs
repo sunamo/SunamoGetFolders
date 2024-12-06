@@ -89,7 +89,7 @@ public class FSGetFolders
     /// <param name="folder"></param>
     /// <param name="list"></param>
     /// <param name="e"></param>
-    private static void GetFoldersEveryFolder(string folder, List<string> list, GetFilesArgsGetFolders e = null)
+    private static void GetFoldersEveryFolder(string folder, List<string> list, ref DateTime dtLastLogActualFolder, GetFilesArgsGetFolders e = null)
     {
         List<string> folders = null;
 #if DEBUG
@@ -99,6 +99,16 @@ public class FSGetFolders
 #endif
         try
         {
+            if (e.SecondsToWriteActualFolder != -1)
+            {
+                var dtDiff = DateTime.Now - dtLastLogActualFolder;
+                if (dtDiff.TotalSeconds > e.SecondsToWriteActualFolder)
+                {
+                    Console.WriteLine(folder);
+                    dtLastLogActualFolder = DateTime.Now;
+                }
+            }
+
             folders = Directory.GetDirectories(folder).ToList();
             folders = CAChangeContent.ChangeContent0(null, folders, FS.WithEndSlash);
             //#if DEBUG
@@ -120,7 +130,7 @@ public class FSGetFolders
         {
             CA.RemoveWhichContainsList(folders, e.excludeFromLocationsCOntains, e.wildcard);
             list.AddRange(folders);
-            for (var i = 0; i < folders.Count; i++) GetFoldersEveryFolder(folders[i], list, e);
+            for (var i = 0; i < folders.Count; i++) GetFoldersEveryFolder(folders[i], list, ref dtLastLogActualFolder, e);
         }
     }
 
@@ -155,7 +165,8 @@ public class FSGetFolders
         //{
         //    pbh = a.progressBarHelper.CreateInstance(a.pb, files.Count, this);
         //}
-        GetFoldersEveryFolder(folder, list, e);
+        DateTime firstFolder = DateTime.Now;
+        GetFoldersEveryFolder(folder, list, ref firstFolder, e);
 
         if (masc != "*")
             for (var i = list.Count - 1; i >= 0; i--)

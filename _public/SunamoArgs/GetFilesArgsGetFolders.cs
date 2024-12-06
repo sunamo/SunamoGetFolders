@@ -2,6 +2,8 @@ namespace SunamoGetFolders._public.SunamoArgs;
 
 public class GetFilesArgsGetFolders : GetFilesBaseArgsGetFolders
 {
+    public int SecondsToWriteActualFolder { get; set; } = -1;
+
     public bool _trimA1AndLeadingBs = false;
 
     public bool _trimExt = false;
