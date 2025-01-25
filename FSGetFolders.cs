@@ -92,11 +92,7 @@ public class FSGetFolders
     private static void GetFoldersEveryFolder(string folder, List<string> list, ref DateTime dtLastLogActualFolder, GetFilesArgsGetFolders e = null)
     {
         List<string> folders = null;
-#if DEBUG
-        if (folder == @"E:\vs\Projects\AllProjectsSearch\Aps.Projs\")
-        {
-        }
-#endif
+
         try
         {
             if (e.SecondsToWriteActualFolder != -1)
