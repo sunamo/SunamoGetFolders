@@ -2,10 +2,6 @@ namespace SunamoGetFolders._sunamo.SunamoFileSystem;
 
 internal class FSND
 {
-    internal static string WithEndSlash(string v)
-    {
-        return WithEndSlash(ref v);
-    }
 
     /// <summary>
     ///     Usage: Exceptions.FileWasntFoundInDirectory
