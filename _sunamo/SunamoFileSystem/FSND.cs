@@ -4,10 +4,6 @@ internal class FSND
 {
 
     
-    internal static void FirstCharUpper(ref string nazevPP)
-    {
-        nazevPP = FirstCharUpper(nazevPP);
-    }
 
     internal static string FirstCharUpper(string nazevPP)
     {
