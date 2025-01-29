@@ -22,29 +22,4 @@ internal class FS
 
 
 
-    internal static void CreateFoldersPsysicallyUnlessThere(string nad)
-    {
-        ThrowEx.IsNullOrEmpty("nad", nad);
-        //ThrowEx.IsNotWindowsPathFormat("nad", nad);
-        if (Directory.Exists(nad)) return;
-        var slozkyKVytvoreni = new List<string>
-        {
-            nad
-        };
-        while (true)
-        {
-            nad = Path.GetDirectoryName(nad);
-
-            if (Directory.Exists(nad)) break;
-            var kopia = nad;
-            slozkyKVytvoreni.Add(kopia);
-        }
-
-        slozkyKVytvoreni.Reverse();
-        foreach (var item in slozkyKVytvoreni)
-        {
-            var folder = item;
-            if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
-        }
-    }
 }
