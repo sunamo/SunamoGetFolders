@@ -165,7 +165,7 @@ public class FSGetFolders
     /// </summary>
     /// <param name="folder"></param>
     /// <param name="mask"></param>
-    public static List<string> GetFoldersEveryFolder(ILogger logger, string folder, string masc, GetFoldersEveryFolderArgs e = null)
+    public static List<string> GetFoldersEveryFolder(ILogger logger, string folder, string masc = "*", GetFoldersEveryFolderArgs? e = null)
     {
         if (e == null) e = new GetFoldersEveryFolderArgs();
         var list = new List<string>();
