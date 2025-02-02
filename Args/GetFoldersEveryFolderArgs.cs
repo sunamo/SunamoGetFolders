@@ -6,6 +6,7 @@ public class GetFoldersEveryFolderArgs : GetFilesArgsGetFolders
     ///     Auto call WithEndSlash
     /// </summary>
     public bool _trimA1AndLeadingBs;
+    public SearchOption SearchOption { get; set; } = SearchOption.AllDirectories;
 
     /// <summary>
     /// Hodí se při velkých složkách např. E:\vs

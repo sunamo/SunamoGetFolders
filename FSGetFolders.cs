@@ -1,4 +1,6 @@
 namespace SunamoGetFolders;
+
+using Microsoft.Extensions.Logging;
 using SunamoGetFolders._sunamo;
 using WildcardMatch;
 
@@ -18,70 +20,70 @@ public class FSGetFolders
         return result;
     }
 
-    public static List<string> GetFolders(string folder, SearchOption so)
-    {
-        return GetFolders(folder, "*", so);
-    }
+    //public static List<string> GetFolders(string folder, SearchOption so)
+    //{
+    //    return GetFolders(folder, "*", so);
+    //}
 
-    public static List<string> GetFolders(string v, string contains)
-    {
-        var folders = GetFolders(v);
-        for (var i = 0; i < folders.Count; i++) folders[i] = folders[i].TrimEnd('\\');
-        //CA.TrimEnd(folders, new char[] { '\\' });
-        for (var i = folders.Count - 1; i >= 0; i--)
-            if (!Regex.IsMatch(Path.GetFileName(folders[i]), contains))
-                folders.RemoveAt(i);
-        return folders;
-    }
+    //public static List<string> GetFolders(string v, string contains)
+    //{
+    //    var folders = GetFolders(v);
+    //    for (var i = 0; i < folders.Count; i++) folders[i] = folders[i].TrimEnd('\\');
+    //    //CA.TrimEnd(folders, new char[] { '\\' });
+    //    for (var i = folders.Count - 1; i >= 0; i--)
+    //        if (!Regex.IsMatch(Path.GetFileName(folders[i]), contains))
+    //            folders.RemoveAt(i);
+    //    return folders;
+    //}
 
-    public static List<string> GetFolders(string folder)
-    {
-        return GetFolders(folder, SearchOption.TopDirectoryOnly);
-    }
+    //public static List<string> GetFolders(string folder)
+    //{
+    //    return GetFolders(folder, SearchOption.TopDirectoryOnly);
+    //}
 
-    /// <summary>
-    ///     Return only subfolder if A3, a1 not include
-    ///     Must have backslash on end - is folder
-    /// </summary>
-    /// <param name="folder"></param>
-    /// <param name="masc"></param>
-    /// <param name="so"></param>
-    /// <param name="_trimA1"></param>
-    public static List<string> GetFolders(string folder, string masc, SearchOption so, bool _trimA1AndLeadingBs = false)
-    {
-        List<string> dirs = null;
-        try
-        {
-            dirs = Directory.GetDirectories(folder, masc, so).ToList();
-        }
-        catch (Exception ex)
-        {
-            ThrowEx.CustomWithStackTrace(ex);
-        }
+    ///// <summary>
+    /////     Return only subfolder if A3, a1 not include
+    /////     Must have backslash on end - is folder
+    ///// </summary>
+    ///// <param name="folder"></param>
+    ///// <param name="masc"></param>
+    ///// <param name="so"></param>
+    ///// <param name="_trimA1"></param>
+    //public static List<string> GetFolders(string folder, string masc, SearchOption so, bool _trimA1AndLeadingBs = false)
+    //{
+    //    List<string> dirs = null;
+    //    try
+    //    {
+    //        dirs = Directory.GetDirectories(folder, masc, so).ToList();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        ThrowEx.CustomWithStackTrace(ex);
+    //    }
 
-        if (dirs == null) return new List<string>();
-        //CAChangeContent.ChangeContent0(null, dirs, d => );
-        for (var i = 0; i < dirs.Count; i++) dirs[i] = SH.FirstCharUpper(dirs[i]);
-        if (_trimA1AndLeadingBs)
-        {
-            for (var i = 0; i < dirs.Count; i++) dirs[i] = SH.FirstCharUpper(dirs[i]);
-            //CA.Replace(dirs, folder, string.Empty);
-            //CA.TrimEnd(dirs, new Char[] { '\\' });
-            for (var i = 0; i < dirs.Count; i++) dirs[i] = dirs[i].Replace(folder, string.Empty);
-            for (var i = 0; i < dirs.Count; i++) dirs[i] = dirs[i].TrimEnd('\\');
-        }
-        else
-        {
-            for (var i = 0; i < dirs.Count; i++) dirs[i] = dirs[i].TrimEnd('\\') + "\\";
-            // Must have backslash on end - is folder
-            //if (CA.PostfixIfNotEnding != null)
-            //{
-            //    CA.PostfixIfNotEnding(@"\"", dirs);
-            //}
-        }
+    //    if (dirs == null) return new List<string>();
+    //    //CAChangeContent.ChangeContent0(null, dirs, d => );
+    //    for (var i = 0; i < dirs.Count; i++) dirs[i] = SH.FirstCharUpper(dirs[i]);
+    //    if (_trimA1AndLeadingBs)
+    //    {
+    //        for (var i = 0; i < dirs.Count; i++) dirs[i] = SH.FirstCharUpper(dirs[i]);
+    //        //CA.Replace(dirs, folder, string.Empty);
+    //        //CA.TrimEnd(dirs, new Char[] { '\\' });
+    //        for (var i = 0; i < dirs.Count; i++) dirs[i] = dirs[i].Replace(folder, string.Empty);
+    //        for (var i = 0; i < dirs.Count; i++) dirs[i] = dirs[i].TrimEnd('\\');
+    //    }
+    //    else
+    //    {
+    //        for (var i = 0; i < dirs.Count; i++) dirs[i] = dirs[i].TrimEnd('\\') + "\\";
+    //        // Must have backslash on end - is folder
+    //        //if (CA.PostfixIfNotEnding != null)
+    //        //{
+    //        //    CA.PostfixIfNotEnding(@"\"", dirs);
+    //        //}
+    //    }
 
-        return dirs;
-    }
+    //    return dirs;
+    //}
 
     /// <summary>
     ///     A3 must be GetFilesArgs, not GetFoldersEveryFolder because is calling from GetFiles
@@ -89,7 +91,7 @@ public class FSGetFolders
     /// <param name="folder"></param>
     /// <param name="list"></param>
     /// <param name="e"></param>
-    private static void GetFoldersEveryFolder(string folder, List<string> list, ref DateTime dtLastLogActualFolder, GetFilesArgsGetFolders e = null)
+    private static void GetFoldersEveryFolder(ILogger logger, string folder, List<string> list, SearchOption so, ref DateTime dtLastLogActualFolder, GetFilesArgsGetFolders e = null)
     {
         List<string> folders = null;
 
@@ -125,33 +127,45 @@ public class FSGetFolders
         if (folders != null)
         {
             CA.RemoveWhichContainsList(folders, e.excludeFromLocationsCOntains, e.wildcard);
+
+            for (int i = folders.Count - 1; i >= 0; i--)
+            {
+                if (JunctionPoint.IsJunctionPoint(logger, folders[i]))
+                {
+                    folders.RemoveAt(i);
+                }
+            }
+
             list.AddRange(folders);
-            for (var i = 0; i < folders.Count; i++) GetFoldersEveryFolder(folders[i], list, ref dtLastLogActualFolder, e);
+            if (so == SearchOption.AllDirectories)
+            {
+                for (var i = 0; i < folders.Count; i++) GetFoldersEveryFolder(logger, folders[i], list, so, ref dtLastLogActualFolder, e);
+            }
         }
     }
 
-    private static void GetFoldersEveryFolder(string folder, string mask, List<string> list)
-    {
-        try
-        {
-            var folders = Directory.GetDirectories(folder, mask, SearchOption.TopDirectoryOnly);
-            list.AddRange(folders);
-            foreach (var item in folders) GetFoldersEveryFolder(item, mask, list);
-        }
-        catch (Exception ex)
-        {
-            ThrowEx.Custom(ex);
-            // Not throw exception, it's probably Access denied  on Documents and Settings etc
-            //throw new Exception("GetFoldersEveryFolder with path: " + folder, ex);
-        }
-    }
+    //private static void GetFoldersEveryFolder(string folder, string mask, List<string> list)
+    //{
+    //    try
+    //    {
+    //        var folders = Directory.GetDirectories(folder, mask, SearchOption.TopDirectoryOnly);
+    //        list.AddRange(folders);
+    //        foreach (var item in folders) GetFoldersEveryFolder(item, mask, list);
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        ThrowEx.Custom(ex);
+    //        // Not throw exception, it's probably Access denied  on Documents and Settings etc
+    //        //throw new Exception("GetFoldersEveryFolder with path: " + folder, ex);
+    //    }
+    //}
 
     /// <summary>
     ///     It's always recursive
     /// </summary>
     /// <param name="folder"></param>
     /// <param name="mask"></param>
-    public static List<string> GetFoldersEveryFolder(string folder, string masc, GetFoldersEveryFolderArgs e = null)
+    public static List<string> GetFoldersEveryFolder(ILogger logger, string folder, string masc, GetFoldersEveryFolderArgs e = null)
     {
         if (e == null) e = new GetFoldersEveryFolderArgs();
         var list = new List<string>();
@@ -162,7 +176,7 @@ public class FSGetFolders
         //    pbh = a.progressBarHelper.CreateInstance(a.pb, files.Count, this);
         //}
         DateTime firstFolder = DateTime.Now;
-        GetFoldersEveryFolder(folder, list, ref firstFolder, e);
+        GetFoldersEveryFolder(logger, folder, list, e.SearchOption, ref firstFolder, e);
 
         if (masc != "*")
             for (var i = list.Count - 1; i >= 0; i--)
@@ -179,6 +193,7 @@ public class FSGetFolders
             // I want to find files recursively
             foreach (var item in e.excludeFromLocationsCOntains)
                 CA.RemoveWhichContains(list, item, e.wildcard, Regex.IsMatch);
+
         return list;
     }
 }
