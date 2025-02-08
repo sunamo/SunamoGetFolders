@@ -1,30 +1,32 @@
 namespace SunamoGetFolders.Args;
 
-public class GetFoldersEveryFolderArgs : GetFilesArgsGetFolders
+public class GetFoldersEveryFolderArgs //: GetFilesArgsGetFolders
 {
-    /// <summary>
-    ///     Auto call WithEndSlash
-    /// </summary>
-    public bool _trimA1AndLeadingBs;
+    public bool _trimA1AndLeadingBs = false;
+    public Func<string, bool> dIsJunctionPoint = null;
+    public bool followJunctions = false;
 
-    /// <summary>
-    /// Hodí se při velkých složkách např. E:\vs
-    /// Je zbytečné vypisovat miliony složek pro každou ale co x sekund aby bylo vidět že se něco děje
-    /// </summary>
+    public int SecondsToWriteActualFolder { get; set; } = -1;
 
 
-    public List<string> excludeFromLocationsCOntains = null;
+    public bool _trimExt = false;
+    public bool byDateOfLastModifiedAsc = false;
+    public bool dontIncludeNewest = false;
+    public List<string> excludeFromLocationsCOntains = new();
+
+
+    public Action<List<string>> excludeWithMethod = null;
+    public Func<string, DateTime?> LastModifiedFromFn;
+    public bool throwEx = false;
+
+
+    public bool useMascFromExtension = false;
+    public bool wildcard = false;
+
 
     // nevím k čemu to je ale zdá se nesmysl, ověřovat můžu přes excludeFromLocationsCOntains != null
     //public bool excludeFromLocationsCOntainsBool = false;
     public bool writeToDebugEveryLoadedFolder = false;
-
-    public GetFoldersEveryFolderArgs(GetFilesEveryFolderArgsGetFolders e)
-    {
-        _trimA1AndLeadingBs = e._trimA1AndLeadingBs;
-        followJunctions = e.followJunctions;
-        dIsJunctionPoint = e.dIsJunctionPoint;
-    }
 
     public GetFoldersEveryFolderArgs()
     {

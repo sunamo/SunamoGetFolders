@@ -35,7 +35,7 @@ partial class FSGetFolders
     /// <param name="folder"></param>
     /// <param name="list"></param>
     /// <param name="e"></param>
-    private static void GetFoldersEveryFolder(ILogger logger, string folder, List<string> list, SearchOption so, ref DateTime dtLastLogActualFolder, GetFilesArgsGetFolders e = null)
+    private static void GetFoldersEveryFolder(ILogger logger, string folder, List<string> list, SearchOption so, ref DateTime dtLastLogActualFolder, GetFoldersEveryFolderArgs e = null)
     {
         List<string> folders = null;
 
