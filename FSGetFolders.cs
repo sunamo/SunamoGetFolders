@@ -26,6 +26,19 @@ public class FSGetFolders
         //return GetFolders(folder, "*", so);
     }
 
+    public static List<string> GetFoldersEveryFolder(ILogger logger, string folder, SearchOption so, GetFoldersEveryFolderArgs? e = null)
+    {
+        if (e == null)
+        {
+            e = new();
+        }
+
+        e.SearchOption = so;
+
+        return GetFoldersEveryFolder(logger, folder, "*", e);
+        //return GetFolders(folder, "*", so);
+    }
+
     public static List<string> GetFoldersEveryFolder(ILogger logger, string v, string contains)
     {
         var folders = GetFoldersEveryFolder(logger, v);
