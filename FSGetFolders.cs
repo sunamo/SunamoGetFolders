@@ -8,6 +8,7 @@ public partial class FSGetFolders
     /// <summary>
     ///     Může být jen jen toto rozhraní
     ///     U všdch ostatních pokud předám jen logger,v neví kterou metodu má použít
+    ///     
     /// </summary>
     /// <param name="folder"></param>
     /// <param name="mask"></param>
