@@ -8,7 +8,7 @@ public class FSGetFolders
 {
     public static List<string> GetFoldersEveryFolderWhichContainsFiles(ILogger logger, string d, string masc, SearchOption topDirectoryOnly)
     {
-        var f = GetFoldersEveryFolder(logger, d, "*", topDirectoryOnly);
+        var f = GetFoldersEveryFolder(logger, d, "*", topDirectoryOnly, false);
         var result = new List<string>();
         foreach (var item in f)
         {
@@ -161,6 +161,18 @@ public class FSGetFolders
         }
     }
 
+    public static List<string> GetFoldersEveryFolder(ILogger logger, string folder, string masc = "*", SearchOption so = SearchOption.TopDirectoryOnly, GetFoldersEveryFolderArgs? e = null)
+    {
+        if (e == null)
+        {
+            e = new GetFoldersEveryFolderArgs();
+        }
+
+        e.SearchOption = so;
+
+        return GetFoldersEveryFolder(logger, folder, masc, e);
+    }
+
     //private static void GetFoldersEveryFolder(string folder, string mask, List<string> list)
     //{
     //    try
@@ -178,7 +190,7 @@ public class FSGetFolders
     //}
 
     /// <summary>
-    ///     It's always recursive
+    ///     
     /// </summary>
     /// <param name="folder"></param>
     /// <param name="mask"></param>
