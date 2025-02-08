@@ -3,7 +3,7 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Version>25.2.8.4</Version>
+    <Version>25.2.8.5</Version>
     <Description>Retrieving folders with automatic exception catching and further processing after</Description>
     <Authors>www.sunamo.cz</Authors>
     <Copyright>www.sunamo.cz</Copyright>
@@ -13,7 +13,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageReleaseNotes>Simplify API</PackageReleaseNotes>
+    <PackageReleaseNotes>Added ExcludeGeneratedCodeFolders</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="_sunamo\SunamoEnums\Enums\" />

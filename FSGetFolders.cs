@@ -36,6 +36,10 @@ public partial class FSGetFolders
             //list = CAChangeContent.ChangeContent0(null, list, d => d = d.Replace(folder, "").TrimStart('\\'));
             for (var i = 0; i < list.Count; i++)
                 list[i] = list[i].Replace(folder, "").TrimStart('\\');
+        List<string> codeFoldersWrapped = e.IgnoreFoldersWithName.Select(d => "\\" + d + "\\").ToList();
+        foreach (var item in codeFoldersWrapped)
+            CA.RemoveWhichContains(list, item, false, null);
+
         if (e.excludeFromLocationsCOntains != null)
             // I want to find files recursively
             foreach (var item in e.excludeFromLocationsCOntains)

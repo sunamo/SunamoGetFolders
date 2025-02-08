@@ -7,10 +7,12 @@ internal class CA
 
 
     internal static void RemoveWhichContains(List<string> files1, string item, bool wildcard,
-        Func<string, string, bool> WildcardIsMatch)
+        Func<string, string, bool>? WildcardIsMatch)
     {
         if (wildcard)
         {
+
+
             //item = SH.WrapWith(item, '*');
             for (var i = files1.Count - 1; i >= 0; i--)
                 if (WildcardIsMatch(files1[i], item))
