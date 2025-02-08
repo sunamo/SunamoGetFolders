@@ -56,6 +56,7 @@ public class FSGetFolders
         //return GetFolders(folder, SearchOption.TopDirectoryOnly);
     }
 
+    [Obsolete("Nabízelo mi to primárně tuto variantu s bool místo s GetFoldersEveryFolder a to dokonce i při napsání new - nabídlo new bool")]
     /// <summary>
     ///     Return only subfolder if A3, a1 not include
     ///     Must have backslash on end - is folder
