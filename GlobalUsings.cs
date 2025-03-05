@@ -19,3 +19,12 @@ global using SunamoGetFolders._sunamo;
 global using SunamoGetFolders._sunamo.SunamoFileSystem;
 global using SunamoGetFolders._sunamo.SunamoGetFiles;
 global using SunamoGetFolders._sunamo.SunamoRegex;
+
+global using Microsoft.Extensions.Logging;
+global using Microsoft.Win32.SafeHandles;
+global using System.Runtime.InteropServices;
+global using System.Threading.Tasks;
+global using WildcardMatch;
+global using ILogger = Microsoft.Extensions.Logging.ILogger;
+global using Microsoft.Extensions.Logging;
+global using NullLogger = Microsoft.Extensions.Logging.Abstractions.NullLogger;
