@@ -1,8 +1,5 @@
 namespace SunamoGetFolders;
 
-using Microsoft.Extensions.Logging;
-using WildcardMatch;
-
 public partial class FSGetFolders
 {
     /// <summary>
@@ -24,14 +21,12 @@ public partial class FSGetFolders
         //}
         DateTime firstFolder = DateTime.Now;
         GetFoldersEveryFolder(logger, folder, list, so, ref firstFolder, e);
-
         if (masc != "*")
             for (var i = list.Count - 1; i >= 0; i--)
             {
                 var fn = Path.GetFileName(list[i].TrimEnd(Path.DirectorySeparatorChar));
                 if (!masc.WildcardMatch(fn)) list.RemoveAt(i);
             }
-
         if (e._trimA1AndLeadingBs)
             //list = CAChangeContent.ChangeContent0(null, list, d => d = d.Replace(folder, "").TrimStart('\\'));
             for (var i = 0; i < list.Count; i++)
@@ -39,12 +34,10 @@ public partial class FSGetFolders
         List<string> codeFoldersWrapped = e.IgnoreFoldersWithName.Select(d => "\\" + d + "\\").ToList();
         foreach (var item in codeFoldersWrapped)
             CA.RemoveWhichContains(list, item, false, null);
-
         if (e.excludeFromLocationsCOntains != null)
             // I want to find files recursively
             foreach (var item in e.excludeFromLocationsCOntains)
                 CA.RemoveWhichContains(list, item, e.wildcard, Regex.IsMatch);
-
         return list;
     }
 }
