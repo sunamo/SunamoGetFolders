@@ -27,6 +27,7 @@ public partial class FSGetFolders
                 var fn = Path.GetFileName(list[i].TrimEnd(Path.DirectorySeparatorChar));
                 if (!masc.WildcardMatch(fn)) list.RemoveAt(i);
             }
+
         if (e._trimA1AndLeadingBs)
             //list = CAChangeContent.ChangeContent0(null, list, d => d = d.Replace(folder, "").TrimStart('\\'));
             for (var i = 0; i < list.Count; i++)
