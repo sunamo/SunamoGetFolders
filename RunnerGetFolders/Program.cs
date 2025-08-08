@@ -1,4 +1,4 @@
-﻿using SunamoGetFolders.Tests;
+using SunamoGetFolders.Tests;
 
 namespace RunnerGetFolders;
 
