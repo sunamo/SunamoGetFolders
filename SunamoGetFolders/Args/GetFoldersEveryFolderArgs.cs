@@ -30,6 +30,11 @@ public class GetFoldersEveryFolderArgs //: GetFilesArgsGetFolders
 
 
     public List<string> IgnoreFoldersWithName { get; set; } = new();
+    
+    /// <summary>
+    /// When true, excluded folders themselves will be included in results but their subfolders won't be traversed
+    /// </summary>
+    public bool IncludeExcludedFoldersWithoutTraversing { get; set; } = false;
 
     private readonly List<string> codeFolders = ["obj", "bin", "node_modules", ".git", ".vs"];
     public bool ExcludeGeneratedCodeFolders

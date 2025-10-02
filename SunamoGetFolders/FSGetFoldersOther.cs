@@ -62,6 +62,33 @@ partial class FSGetFolders
         if (folders != null)
         {
             CA.RemoveWhichContainsList(folders, e.excludeFromLocationsCOntains, e.wildcard);
+            
+            // Track which folders should be excluded from traversal
+            var foldersToExcludeFromTraversal = new HashSet<string>();
+            
+            // Check for folders to ignore
+            if (e.IgnoreFoldersWithName != null && e.IgnoreFoldersWithName.Count > 0)
+            {
+                for (int i = folders.Count - 1; i >= 0; i--)
+                {
+                    var folderName = Path.GetFileName(folders[i].TrimEnd(Path.DirectorySeparatorChar));
+                    if (e.IgnoreFoldersWithName.Contains(folderName))
+                    {
+                        if (e.IncludeExcludedFoldersWithoutTraversing)
+                        {
+                            // Mark for exclusion from traversal but keep in list
+                            foldersToExcludeFromTraversal.Add(folders[i]);
+                        }
+                        else
+                        {
+                            // Remove completely
+                            folders.RemoveAt(i);
+                        }
+                    }
+                }
+            }
+            
+            // Check for junction points
             for (int i = folders.Count - 1; i >= 0; i--)
             {
                 if (JunctionPoint.IsJunctionPoint(logger, folders[i]))
@@ -69,10 +96,19 @@ partial class FSGetFolders
                     folders.RemoveAt(i);
                 }
             }
+            
             list.AddRange(folders);
+            
             if (so == SearchOption.AllDirectories)
             {
-                for (var i = 0; i < folders.Count; i++) GetFoldersEveryFolder(logger, folders[i], list, so, ref dtLastLogActualFolder, e);
+                for (var i = 0; i < folders.Count; i++)
+                {
+                    // Only traverse if not in exclusion list
+                    if (!foldersToExcludeFromTraversal.Contains(folders[i]))
+                    {
+                        GetFoldersEveryFolder(logger, folders[i], list, so, ref dtLastLogActualFolder, e);
+                    }
+                }
             }
         }
     }

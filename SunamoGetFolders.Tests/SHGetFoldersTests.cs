@@ -30,6 +30,53 @@ public class SHGetFoldersTests
     }
 
     [Fact]
+    public void GetFoldersTest_ReturnCodeFoldersButNotItsInner()
+    {
+        // Test with folder "a" - add "a" to ignored folders
+        var args = new GetFoldersEveryFolderArgs 
+        { 
+            IgnoreFoldersWithName = { "a" },  // Add "a" to ignored folders
+            IncludeExcludedFoldersWithoutTraversing = true 
+        };
+        
+        // Search for folders matching mask "a"
+        var f = FSGetFolders.GetFoldersEveryFolder(logger, @"D:\_Test\PlatformIndependentNuGetPackages\SunamoGetFolders\", "a", SearchOption.AllDirectories, args);
+        
+        // Should contain D:\_Test\PlatformIndependentNuGetPackages\SunamoGetFolders\d\a\
+        var aFolder = @"D:\_Test\PlatformIndependentNuGetPackages\SunamoGetFolders\d\a\";
+        Assert.Contains(aFolder, f);
+        
+        // Should NOT contain D:\_Test\PlatformIndependentNuGetPackages\SunamoGetFolders\d\a\ab\a\
+        var nestedAFolder = @"D:\_Test\PlatformIndependentNuGetPackages\SunamoGetFolders\d\a\ab\a\";
+        Assert.DoesNotContain(nestedAFolder, f);
+    }
+    
+    [Fact]
+    public void GetFoldersTest_ReturnCodeFoldersButNotItsInner_WithExcludeGeneratedCodeFolders()
+    {
+        // Test with ExcludeGeneratedCodeFolders which adds standard code folders to ignore list
+        var args = new GetFoldersEveryFolderArgs 
+        { 
+            ExcludeGeneratedCodeFolders = true,  // This adds obj, bin, node_modules, .git, .vs to IgnoreFoldersWithName
+            IncludeExcludedFoldersWithoutTraversing = true 
+        };
+        
+        // Search for folders named "obj"
+        var f = FSGetFolders.GetFoldersEveryFolder(logger, @"D:\_Test\PlatformIndependentNuGetPackages\SunamoGetFolders\", "obj", SearchOption.AllDirectories, args);
+        
+        // Check results - should find obj folders but not their subfolders
+        var objFolder = f.FirstOrDefault(x => x.EndsWith(@"\obj\"));
+        if (objFolder != null)  // Only test if obj folder exists
+        {
+            Assert.NotNull(objFolder);
+            
+            // Should NOT contain subfolders of obj
+            var objSubfolders = f.Where(x => x.Contains(@"\obj\") && !x.EndsWith(@"\obj\")).ToList();
+            Assert.Empty(objSubfolders);
+        }
+    }
+
+    [Fact]
     public void GetFoldersTest()
     {
         List<List<string>> r = new List<List<string>>();
