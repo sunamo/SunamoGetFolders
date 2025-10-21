@@ -1,3 +1,6 @@
+// EN: Variable names have been checked and replaced with self-descriptive names
+// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
+
 namespace SunamoGetFolders.Tests;
 
 using Microsoft.Extensions.Logging;
@@ -20,7 +23,7 @@ public class SHGetFoldersTests
     [Fact]
     public void GetFoldersEveryFolder_ExcludeJunction_Test()
     {
-        var d = FSGetFolders.GetFoldersEveryFolder(logger, @"D:\", "*", SearchOption.TopDirectoryOnly, new GetFoldersEveryFolderArgs { followJunctions = false });
+        var data = FSGetFolders.GetFoldersEveryFolder(logger, @"D:\", "*", SearchOption.TopDirectoryOnly, new GetFoldersEveryFolderArgs { followJunctions = false });
     }
 
     [Fact]
@@ -42,11 +45,11 @@ public class SHGetFoldersTests
         // Search for folders matching mask "a"
         var f = FSGetFolders.GetFoldersEveryFolder(logger, @"D:\_Test\PlatformIndependentNuGetPackages\SunamoGetFolders\", "a", SearchOption.AllDirectories, args);
         
-        // Should contain D:\_Test\PlatformIndependentNuGetPackages\SunamoGetFolders\d\a\
+        // Should contain data:\_Test\PlatformIndependentNuGetPackages\SunamoGetFolders\d\a\
         var aFolder = @"D:\_Test\PlatformIndependentNuGetPackages\SunamoGetFolders\d\a\";
         Assert.Contains(aFolder, f);
         
-        // Should NOT contain D:\_Test\PlatformIndependentNuGetPackages\SunamoGetFolders\d\a\ab\a\
+        // Should NOT contain data:\_Test\PlatformIndependentNuGetPackages\SunamoGetFolders\d\a\ab\a\
         var nestedAFolder = @"D:\_Test\PlatformIndependentNuGetPackages\SunamoGetFolders\d\a\ab\a\";
         Assert.DoesNotContain(nestedAFolder, f);
     }
@@ -81,24 +84,24 @@ public class SHGetFoldersTests
     {
         List<List<string>> r = new List<List<string>>();
 
-        var d = DriveInfo.GetDrives();
-        foreach (var item in d)
+        var data = DriveInfo.GetDrives();
+        foreach (var item in data)
         {
             r.Add(FSGetFolders.GetFoldersEveryFolder(logger, item.RootDirectory.FullName, "*", SearchOption.TopDirectoryOnly, new Args.GetFoldersEveryFolderArgs { followJunctions = false }));
         }
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
 
         foreach (var item in r)
         {
             foreach (var item2 in item)
             {
-                sb.AppendLine(item2);
+                stringBuilder.AppendLine(item2);
             }
-            sb.AppendLine();
-            sb.AppendLine();
+            stringBuilder.AppendLine();
+            stringBuilder.AppendLine();
         }
 
-        File.WriteAllText(@"D:\a.txt", sb.ToString());
+        File.WriteAllText(@"D:\a.txt", stringBuilder.ToString());
     }
 }
