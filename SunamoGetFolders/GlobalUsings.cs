@@ -25,5 +25,4 @@ global using System.Runtime.InteropServices;
 global using System.Threading.Tasks;
 global using WildcardMatch;
 global using ILogger = Microsoft.Extensions.Logging.ILogger;
-global using Microsoft.Extensions.Logging;
 global using NullLogger = Microsoft.Extensions.Logging.Abstractions.NullLogger;

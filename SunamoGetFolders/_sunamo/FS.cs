@@ -2,24 +2,27 @@ namespace SunamoGetFolders._sunamo;
 
 internal class FS
 {
-    internal static string WithEndSlash(string v)
+    /// <summary>
+    /// Ensures the path ends with a backslash and has uppercase first character
+    /// </summary>
+    /// <param name="path">The path to modify</param>
+    /// <returns>Path with ending backslash and uppercase first character</returns>
+    internal static string WithEndSlash(string path)
     {
-        return WithEndSlash(ref v);
+        return WithEndSlash(ref path);
     }
 
     /// <summary>
-    ///     Usage: Exceptions.FileWasntFoundInDirectory
+    /// Ensures the path ends with a backslash and has uppercase first character
+    /// Usage: Exceptions.FileWasntFoundInDirectory
     /// </summary>
-    /// <param name="v"></param>
-    /// <returns></returns>
-    internal static string WithEndSlash(ref string v)
+    /// <param name="path">The path to modify (passed by reference)</param>
+    /// <returns>Path with ending backslash and uppercase first character</returns>
+    internal static string WithEndSlash(ref string path)
     {
-        if (v != string.Empty) v = v.TrimEnd('\\') + '\\';
+        if (path != string.Empty) path = path.TrimEnd('\\') + '\\';
 
-        SH.FirstCharUpper(ref v);
-        return v;
+        SH.FirstCharUpper(ref path);
+        return path;
     }
-
-
-
 }

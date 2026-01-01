@@ -2,20 +2,28 @@ namespace SunamoGetFolders._sunamo;
 
 internal class SH
 {
-    internal static void FirstCharUpper(ref string nazevPP)
+    /// <summary>
+    /// Converts the first character of the text to uppercase
+    /// </summary>
+    /// <param name="text">The text to modify (passed by reference)</param>
+    internal static void FirstCharUpper(ref string text)
     {
-        nazevPP = FirstCharUpper(nazevPP);
+        text = FirstCharUpper(text);
     }
 
-    internal static string FirstCharUpper(string nazevPP)
+    /// <summary>
+    /// Converts the first character of the text to uppercase
+    /// </summary>
+    /// <param name="text">The text to modify</param>
+    /// <returns>Text with uppercase first character</returns>
+    internal static string FirstCharUpper(string text)
     {
-        if (nazevPP.Length == 1)
+        if (text.Length == 1)
         {
-            return nazevPP.ToUpper();
+            return text.ToUpper();
         }
 
-        string sb = nazevPP.Substring(1);
-        return nazevPP[0].ToString().ToUpper() + sb;
+        string restOfText = text.Substring(1);
+        return text[0].ToString().ToUpper() + restOfText;
     }
-
 }

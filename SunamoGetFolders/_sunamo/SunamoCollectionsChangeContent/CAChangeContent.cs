@@ -2,39 +2,37 @@ namespace SunamoGetFolders._sunamo.SunamoCollectionsChangeContent;
 
 internal class CAChangeContent
 {
-    private static void RemoveNullOrEmpty(ChangeContentArgsGetFolders a, List<string> files_in)
+    /// <summary>
+    /// Removes null or empty strings from the list based on the arguments
+    /// </summary>
+    /// <param name="args">Arguments specifying which items to remove</param>
+    /// <param name="list">The list to modify</param>
+    private static void RemoveNullOrEmpty(ChangeContentArgsGetFolders? args, List<string> list)
     {
-        if (a != null)
+        if (args != null)
         {
-            if (a.removeNull) files_in.Remove(null);
-            if (a.removeEmpty)
-                for (var i = files_in.Count - 1; i >= 0; i--)
-                    if (files_in[i].Trim() == string.Empty)
-                        files_in.RemoveAt(i);
+            if (args.removeNull) list.Remove(null!);
+            if (args.removeEmpty)
+                for (var i = list.Count - 1; i >= 0; i--)
+                    if (list[i].Trim() == string.Empty)
+                        list.RemoveAt(i);
         }
     }
 
     /// <summary>
-    ///     Direct edit
-    ///     If not every element fullfil pattern, is good to remove null (or values returned if cant be changed) from result
-    ///     Poslední číslo je počet parametrů jež se předávají do delegátu
+    /// Changes content of each element in the list using the provided function
+    /// Direct edit - modifies the list in place
+    /// If not every element fulfills pattern, it is good to remove null (or values returned if can't be changed) from result
     /// </summary>
-    /// <param name="files_in"></param>
-    /// <param name="func"></param>
-    internal static List<string> ChangeContent0(ChangeContentArgsGetFolders a, List<string> files_in,
-        Func<string, string> func)
+    /// <param name="args">Optional arguments for removing null/empty values</param>
+    /// <param name="list">The list to modify</param>
+    /// <param name="transformFunc">Function to transform each element</param>
+    /// <returns>The modified list</returns>
+    internal static List<string> ChangeContent0(ChangeContentArgsGetFolders? args, List<string> list,
+        Func<string, string> transformFunc)
     {
-        for (var i = 0; i < files_in.Count; i++) files_in[i] = func.Invoke(files_in[i]);
-        RemoveNullOrEmpty(a, files_in);
-        return files_in;
+        for (var i = 0; i < list.Count; i++) list[i] = transformFunc.Invoke(list[i]);
+        RemoveNullOrEmpty(args, list);
+        return list;
     }
-
-    #region Vem obojí
-
-    #endregion
-
-    #region ChangeContent for easy copy
-
-
-    #endregion
 }

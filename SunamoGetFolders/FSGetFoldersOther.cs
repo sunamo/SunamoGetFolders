@@ -2,79 +2,89 @@ namespace SunamoGetFolders;
 
 partial class FSGetFolders
 {
-    public static List<string> GetFoldersEveryFolderWhichContainsFiles(ILogger logger, string d, string masc, SearchOption topDirectoryOnly)
+    /// <summary>
+    /// Gets all folders that contain files matching the specified pattern
+    /// </summary>
+    /// <param name="logger">Logger instance for logging operations</param>
+    /// <param name="folderPath">The folder path to search</param>
+    /// <param name="searchPattern">The file search pattern (e.g., "*.txt")</param>
+    /// <param name="topDirectoryOnly">Search option for top directory only or all directories</param>
+    /// <returns>List of folder paths that contain matching files</returns>
+    public static List<string> GetFoldersEveryFolderWhichContainsFiles(ILogger logger, string folderPath, string searchPattern, SearchOption topDirectoryOnly)
     {
-        var f = GetFoldersEveryFolder(logger, d, "*", topDirectoryOnly, new GetFoldersEveryFolderArgs { _trimA1AndLeadingBs = false });
+        var folders = GetFoldersEveryFolder(logger, folderPath, "*", topDirectoryOnly, new GetFoldersEveryFolderArgs { _trimA1AndLeadingBs = false });
         var result = new List<string>();
-        foreach (var item in f)
+        foreach (var item in folders)
         {
-            var files = Directory.GetFiles(item, masc, topDirectoryOnly).ToList();
+            var files = Directory.GetFiles(item, searchPattern, topDirectoryOnly).ToList();
             if (files.Count != 0) result.Add(item);
         }
-        result = result.ConvertAll(d => d + "\\");
+        result = result.ConvertAll(folderPath => folderPath + "\\");
         return result;
     }
-    public static List<string> GetFoldersEveryFolder(ILogger logger, string v, string contains)
+
+    /// <summary>
+    /// Gets all folders that match the specified regex pattern
+    /// </summary>
+    /// <param name="logger">Logger instance for logging operations</param>
+    /// <param name="folderPath">The folder path to search</param>
+    /// <param name="regexPattern">Regular expression pattern to match folder names</param>
+    /// <returns>List of folder paths matching the pattern</returns>
+    public static List<string> GetFoldersEveryFolder(ILogger logger, string folderPath, string regexPattern)
     {
-        var folders = GetFoldersEveryFolder(logger, v);
+        var folders = GetFoldersEveryFolder(logger, folderPath);
         for (var i = 0; i < folders.Count; i++) folders[i] = folders[i].TrimEnd('\\');
-        //CA.TrimEnd(folders, new char[] { '\\' });
         for (var i = folders.Count - 1; i >= 0; i--)
-            if (!Regex.IsMatch(Path.GetFileName(folders[i]), contains))
+            if (!Regex.IsMatch(Path.GetFileName(folders[i]), regexPattern))
                 folders.RemoveAt(i);
         return folders;
     }
     /// <summary>
-    ///     A3 must be GetFilesArgs, not GetFoldersEveryFolder because is calling from GetFiles
+    /// Recursively gets all folders in the specified directory
     /// </summary>
-    /// <param name="folder"></param>
-    /// <param name="list"></param>
-    /// <param name="e"></param>
-    private static void GetFoldersEveryFolder(ILogger logger, string folder, List<string> list, SearchOption so, ref DateTime dtLastLogActualFolder, GetFoldersEveryFolderArgs e = null)
+    /// <param name="logger">Logger instance for logging operations</param>
+    /// <param name="folderPath">The folder path to search</param>
+    /// <param name="resultList">List to store found folder paths</param>
+    /// <param name="searchOption">Search option for top directory only or all directories</param>
+    /// <param name="lastLogTime">Reference to last log time for progress tracking</param>
+    /// <param name="args">Optional arguments for folder retrieval configuration</param>
+    private static void GetFoldersEveryFolder(ILogger logger, string folderPath, List<string> resultList, SearchOption searchOption, ref DateTime lastLogTime, GetFoldersEveryFolderArgs? args = null)
     {
-        List<string> folders = null;
+        List<string>? folders = null;
         try
         {
-            if (e.SecondsToWriteActualFolder != -1)
+            if (args != null && args.SecondsToWriteActualFolder != -1)
             {
-                var dtDiff = DateTime.Now - dtLastLogActualFolder;
-                if (dtDiff.TotalSeconds > e.SecondsToWriteActualFolder)
+                var timeDifference = DateTime.Now - lastLogTime;
+                if (timeDifference.TotalSeconds > args.SecondsToWriteActualFolder)
                 {
-                    Console.WriteLine(folder);
-                    dtLastLogActualFolder = DateTime.Now;
+                    Console.WriteLine(folderPath);
+                    lastLogTime = DateTime.Now;
                 }
             }
-            folders = Directory.GetDirectories(folder).ToList();
+            folders = Directory.GetDirectories(folderPath).ToList();
             folders = CAChangeContent.ChangeContent0(null, folders, FS.WithEndSlash);
-            //#if DEBUG
-            //            if (e.writeToDebugEveryLoadedFolder)
-            //            {
-            //                DebugLogger.Instance.WriteLine("GetFoldersEveryFolder: " + folder);
-            //            }
-            //#endif
         }
         catch (Exception ex)
         {
-            if (e.throwEx) ThrowEx.Custom(ex);
-            // Not throw exception, it's probably Access denied  on Documents and Settings etc
-            //throw new Exception("GetFoldersEveryFolder with path: " + folder, ex);
+            if (args != null && args.throwEx) ThrowEx.Custom(ex);
         }
-        if (folders != null)
+        if (folders != null && args != null)
         {
-            CA.RemoveWhichContainsList(folders, e.excludeFromLocationsCOntains, e.wildcard);
-            
+            CA.RemoveWhichContainsList(folders, args.excludeFromLocationsCOntains, args.wildcard);
+
             // Track which folders should be excluded from traversal
             var foldersToExcludeFromTraversal = new HashSet<string>();
-            
+
             // Check for folders to ignore
-            if (e.IgnoreFoldersWithName != null && e.IgnoreFoldersWithName.Count > 0)
+            if (args.IgnoreFoldersWithName != null && args.IgnoreFoldersWithName.Count > 0)
             {
                 for (int i = folders.Count - 1; i >= 0; i--)
                 {
                     var folderName = Path.GetFileName(folders[i].TrimEnd(Path.DirectorySeparatorChar));
-                    if (e.IgnoreFoldersWithName.Contains(folderName))
+                    if (args.IgnoreFoldersWithName.Contains(folderName))
                     {
-                        if (e.IncludeExcludedFoldersWithoutTraversing)
+                        if (args.IncludeExcludedFoldersWithoutTraversing)
                         {
                             // Mark for exclusion from traversal but keep in list
                             foldersToExcludeFromTraversal.Add(folders[i]);
@@ -87,7 +97,7 @@ partial class FSGetFolders
                     }
                 }
             }
-            
+
             // Check for junction points
             for (int i = folders.Count - 1; i >= 0; i--)
             {
@@ -96,17 +106,17 @@ partial class FSGetFolders
                     folders.RemoveAt(i);
                 }
             }
-            
-            list.AddRange(folders);
-            
-            if (so == SearchOption.AllDirectories)
+
+            resultList.AddRange(folders);
+
+            if (searchOption == SearchOption.AllDirectories)
             {
                 for (var i = 0; i < folders.Count; i++)
                 {
                     // Only traverse if not in exclusion list
                     if (!foldersToExcludeFromTraversal.Contains(folders[i]))
                     {
-                        GetFoldersEveryFolder(logger, folders[i], list, so, ref dtLastLogActualFolder, e);
+                        GetFoldersEveryFolder(logger, folders[i], resultList, searchOption, ref lastLogTime, args);
                     }
                 }
             }

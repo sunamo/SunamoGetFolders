@@ -1,37 +1,62 @@
 namespace SunamoGetFolders._sunamo.SunamoExceptions;
 
-// EN: Variable names have been checked and replaced with self-descriptive names
-// CZ: Názvy proměnných byly zkontrolovány a nahrazeny samopopisnými názvy
 internal partial class ThrowEx
 {
+    /// <summary>
+    /// Throws a custom exception with the exception text
+    /// </summary>
+    /// <param name="exception">The exception to process</param>
+    /// <param name="isReallyThrowing">Whether to actually throw the exception</param>
+    /// <returns>True if exception would be thrown, false otherwise</returns>
+    internal static bool Custom(Exception exception, bool isReallyThrowing = true)
+    { return Custom(Exceptions.TextOfExceptions(exception), isReallyThrowing); }
 
-    internal static bool Custom(Exception ex, bool reallyThrow = true)
-    { return Custom(Exceptions.TextOfExceptions(ex), reallyThrow); }
-
-    internal static bool Custom(string message, bool reallyThrow = true, string secondMessage = "")
+    /// <summary>
+    /// Throws a custom exception with the specified message
+    /// </summary>
+    /// <param name="message">The exception message</param>
+    /// <param name="isReallyThrowing">Whether to actually throw the exception</param>
+    /// <param name="secondMessage">Optional second message to append</param>
+    /// <returns>True if exception would be thrown, false otherwise</returns>
+    internal static bool Custom(string message, bool isReallyThrowing = true, string secondMessage = "")
     {
-        string joined = string.Join(" ", message, secondMessage);
-        string? str = Exceptions.Custom(FullNameOfExecutedCode(), joined);
-        return ThrowIsNotNull(str, reallyThrow);
+        string joinedMessage = string.Join(" ", message, secondMessage);
+        string? exceptionText = Exceptions.Custom(FullNameOfExecutedCode(), joinedMessage);
+        return ThrowIsNotNull(exceptionText, isReallyThrowing);
     }
 
-    internal static bool CustomWithStackTrace(Exception ex) { return Custom(Exceptions.TextOfExceptions(ex)); }
-
+    /// <summary>
+    /// Throws a custom exception with stack trace information
+    /// </summary>
+    /// <param name="exception">The exception to process</param>
+    /// <returns>True if exception would be thrown, false otherwise</returns>
+    internal static bool CustomWithStackTrace(Exception exception) { return Custom(Exceptions.TextOfExceptions(exception)); }
 
     #region Other
+    /// <summary>
+    /// Gets the full name of the currently executed code (type and method)
+    /// </summary>
+    /// <returns>Full name in format Type.Method</returns>
     internal static string FullNameOfExecutedCode()
     {
-        Tuple<string, string, string> placeOfExc = Exceptions.PlaceOfException();
-        string f = FullNameOfExecutedCode(placeOfExc.Item1, placeOfExc.Item2, true);
-        return f;
+        Tuple<string, string, string> placeOfException = Exceptions.PlaceOfException();
+        string fullName = FullNameOfExecutedCode(placeOfException.Item1, placeOfException.Item2, true);
+        return fullName;
     }
 
-    static string FullNameOfExecutedCode(object type, string methodName, bool fromThrowEx = false)
+    /// <summary>
+    /// Gets the full name of the executed code from type and method name
+    /// </summary>
+    /// <param name="type">The type (can be Type, MethodBase, string, or any object)</param>
+    /// <param name="methodName">The method name</param>
+    /// <param name="isFromThrowEx">Whether called from ThrowEx (affects stack depth)</param>
+    /// <returns>Full name in format Type.Method</returns>
+    static string FullNameOfExecutedCode(object type, string methodName, bool isFromThrowEx = false)
     {
         if (methodName == null)
         {
             int depth = 2;
-            if (fromThrowEx)
+            if (isFromThrowEx)
             {
                 depth++;
             }
@@ -39,9 +64,9 @@ internal partial class ThrowEx
             methodName = Exceptions.CallingMethod(depth);
         }
         string typeFullName;
-        if (type is Type type2)
+        if (type is Type concreteType)
         {
-            typeFullName = type2.FullName ?? "Type cannot be get via type is Type type2";
+            typeFullName = concreteType.FullName ?? "Type cannot be get via type is Type";
         }
         else if (type is MethodBase method)
         {
@@ -54,20 +79,26 @@ internal partial class ThrowEx
         }
         else
         {
-            Type t = type.GetType();
-            typeFullName = t.FullName ?? "Type cannot be get via type.GetType()";
+            Type objectType = type.GetType();
+            typeFullName = objectType.FullName ?? "Type cannot be get via type.GetType()";
         }
         return string.Concat(typeFullName, ".", methodName);
     }
 
-    internal static bool ThrowIsNotNull(string? exception, bool reallyThrow = true)
+    /// <summary>
+    /// Throws exception if the exception text is not null
+    /// </summary>
+    /// <param name="exceptionText">The exception text to check</param>
+    /// <param name="isReallyThrowing">Whether to actually throw the exception</param>
+    /// <returns>True if exception would be thrown, false otherwise</returns>
+    internal static bool ThrowIsNotNull(string? exceptionText, bool isReallyThrowing = true)
     {
-        if (exception != null)
+        if (exceptionText != null)
         {
             Debugger.Break();
-            if (reallyThrow)
+            if (isReallyThrowing)
             {
-                throw new Exception(exception);
+                throw new Exception(exceptionText);
             }
             return true;
         }

@@ -15,6 +15,7 @@ internal partial class JunctionPoint
     ///     For junction true
     ///     Determines whether the specified path exists and refers to a junction point.
     /// </summary>
+    /// <param name="logger">Logger instance for logging operations</param>
     /// <param name="path">The junction point path</param>
     /// <returns>True if the specified path represents a junction point</returns>
     /// <exception cref="IOException">
@@ -34,8 +35,10 @@ internal partial class JunctionPoint
     /// <summary>
     ///     Cant be use for H
     /// </summary>
-    /// <param name="reparsePoint"></param>
-    /// <param name="accessMode"></param>
+    /// <param name="logger">Logger instance for logging operations</param>
+    /// <param name="reparsePoint">The reparse point path</param>
+    /// <param name="accessMode">The file access mode</param>
+    /// <returns>SafeFileHandle for the reparse point or null on error</returns>
     protected static SafeFileHandle? OpenReparsePoint(ILogger logger, string reparsePoint, EFileAccess accessMode)
     {
         var reparsePointHandle = new SafeFileHandle(CreateFile(reparsePoint, accessMode,
@@ -112,15 +115,20 @@ internal partial class JunctionPoint
     ///     path in the virtual file system.
     /// </summary>
     protected const string NonInterpretedPathPrefix = @"\??\";
-    protected static bool ThrowLastWin32Error(ILogger logger, int err, string message)
+    /// <summary>
+    /// Handles Win32 errors when working with reparse points
+    /// </summary>
+    /// <param name="logger">Logger instance for logging errors</param>
+    /// <param name="errorCode">The Win32 error code</param>
+    /// <param name="message">Error message to log</param>
+    /// <returns>True if error should be ignored, false otherwise</returns>
+    protected static bool ThrowLastWin32Error(ILogger logger, int errorCode, string message)
     {
-        if (err == 5)
+        if (errorCode == 5)
         {
-            /*
-Jedná se o tuto chybu:
-'UnableToOpenReparsePointSystem.UnauthorizedAccessException: Access is denied. (0x80070005 (E_ACCESSDENIED))'
-Nepomůže spustit ani VS jako admin
-             */
+            // Error 5 is ACCESS_DENIED (0x80070005)
+            // UnableToOpenReparsePointSystem.UnauthorizedAccessException: Access is denied. (0x80070005 (E_ACCESSDENIED))
+            // Even running VS as admin doesn't help with this error
             return true;
         }
         logger.LogError(message + Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error()));

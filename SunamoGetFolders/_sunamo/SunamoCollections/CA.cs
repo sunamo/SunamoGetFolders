@@ -2,33 +2,40 @@ namespace SunamoGetFolders._sunamo.SunamoCollections;
 
 internal class CA
 {
-
-
-
-
-    internal static void RemoveWhichContains(List<string> files1, string item, bool wildcard,
-        Func<string, string, bool>? WildcardIsMatch)
+    /// <summary>
+    /// Removes items from the list that contain the specified pattern
+    /// </summary>
+    /// <param name="list">The list to modify</param>
+    /// <param name="searchPattern">The pattern to search for</param>
+    /// <param name="isUsingWildcard">Whether to use wildcard matching</param>
+    /// <param name="wildcardIsMatch">Optional wildcard matching function</param>
+    internal static void RemoveWhichContains(List<string> list, string searchPattern, bool isUsingWildcard,
+        Func<string, string, bool>? wildcardIsMatch)
     {
-        if (wildcard)
+        if (isUsingWildcard && wildcardIsMatch != null)
         {
-
-
-            //item = SH.WrapWith(item, '*');
-            for (var i = files1.Count - 1; i >= 0; i--)
-                if (WildcardIsMatch(files1[i], item))
-                    files1.RemoveAt(i);
+            for (var i = list.Count - 1; i >= 0; i--)
+                if (wildcardIsMatch(list[i], searchPattern))
+                    list.RemoveAt(i);
         }
         else
         {
-            for (var i = files1.Count - 1; i >= 0; i--)
-                if (files1[i].Contains(item))
-                    files1.RemoveAt(i);
+            for (var i = list.Count - 1; i >= 0; i--)
+                if (list[i].Contains(searchPattern))
+                    list.RemoveAt(i);
         }
     }
 
-    internal static void RemoveWhichContainsList(List<string> files, List<string> list, bool wildcard,
-        Func<string, string, bool> WildcardIsMatch = null)
+    /// <summary>
+    /// Removes items from the list that contain any pattern from the pattern list
+    /// </summary>
+    /// <param name="list">The list to modify</param>
+    /// <param name="patternList">List of patterns to search for</param>
+    /// <param name="isUsingWildcard">Whether to use wildcard matching</param>
+    /// <param name="wildcardIsMatch">Optional wildcard matching function</param>
+    internal static void RemoveWhichContainsList(List<string> list, List<string> patternList, bool isUsingWildcard,
+        Func<string, string, bool>? wildcardIsMatch = null)
     {
-        foreach (var item in list) RemoveWhichContains(files, item, wildcard, WildcardIsMatch);
+        foreach (var item in patternList) RemoveWhichContains(list, item, isUsingWildcard, wildcardIsMatch);
     }
 }

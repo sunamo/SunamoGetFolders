@@ -1,50 +1,51 @@
 namespace SunamoGetFolders;
 
+/// <summary>
+/// Provides methods for getting folders from the file system
+/// </summary>
 public partial class FSGetFolders
 {
     /// <summary>
-    ///     Může být jen jen toto rozhraní
-    ///     U všdch ostatních pokud předám jen logger,v neví kterou metodu má použít
-    ///     
+    /// Gets all folders in the specified directory with optional filtering
+    /// Only this interface signature can be used - other overloads wouldn't know which method to call when only logger is provided
     /// </summary>
-    /// <param name="folder"></param>
-    /// <param name="mask"></param>
-    public static List<string> GetFoldersEveryFolder(ILogger logger, string folder, string masc = "*", SearchOption so = SearchOption.TopDirectoryOnly, GetFoldersEveryFolderArgs? e = null)
+    /// <param name="logger">Logger instance for logging operations</param>
+    /// <param name="folderPath">The folder path to search</param>
+    /// <param name="searchPattern">Search pattern for folder names (supports wildcards, default is "*")</param>
+    /// <param name="searchOption">Search option for top directory only or all directories</param>
+    /// <param name="args">Optional arguments for folder retrieval configuration</param>
+    /// <returns>List of folder paths matching the criteria</returns>
+    public static List<string> GetFoldersEveryFolder(ILogger logger, string folderPath, string searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly, GetFoldersEveryFolderArgs? args = null)
     {
-        if (e == null) e = new GetFoldersEveryFolderArgs();
-        var list = new List<string>();
-        // zde progress bar nedává smysl. načítám to rekurzivně, tedy nevím na začátku kolik těch složek bude
-        //IProgressBarHelper pbh = null;
-        //if (a.progressBarHelper != null)
-        //{
-        //    pbh = a.progressBarHelper.CreateInstance(a.pb, files.Count, this);
-        //}
-        DateTime firstFolder = DateTime.Now;
-        GetFoldersEveryFolder(logger, folder, list, so, ref firstFolder, e);
-        if (masc != "*")
-            for (var i = list.Count - 1; i >= 0; i--)
+        if (args == null) args = new GetFoldersEveryFolderArgs();
+        var resultList = new List<string>();
+
+        DateTime lastLogTime = DateTime.Now;
+        GetFoldersEveryFolder(logger, folderPath, resultList, searchOption, ref lastLogTime, args);
+
+        if (searchPattern != "*")
+            for (var i = resultList.Count - 1; i >= 0; i--)
             {
-                var fn = Path.GetFileName(list[i].TrimEnd(Path.DirectorySeparatorChar));
-                if (!masc.WildcardMatch(fn)) list.RemoveAt(i);
+                var folderName = Path.GetFileName(resultList[i].TrimEnd(Path.DirectorySeparatorChar));
+                if (!searchPattern.WildcardMatch(folderName)) resultList.RemoveAt(i);
             }
 
-        if (e._trimA1AndLeadingBs)
-            //list = CAChangeContent.ChangeContent0(null, list, d => d = d.Replace(folder, "").TrimStart('\\'));
-            for (var i = 0; i < list.Count; i++)
-                list[i] = list[i].Replace(folder, "").TrimStart('\\');
-        
+        if (args._trimA1AndLeadingBs)
+            for (var i = 0; i < resultList.Count; i++)
+                resultList[i] = resultList[i].Replace(folderPath, "").TrimStart('\\');
+
         // Only remove folders from results if IncludeExcludedFoldersWithoutTraversing is false
-        if (!e.IncludeExcludedFoldersWithoutTraversing)
+        if (!args.IncludeExcludedFoldersWithoutTraversing)
         {
-            List<string> codeFoldersWrapped = e.IgnoreFoldersWithName.Select(d => "\\" + d + "\\").ToList();
+            List<string> codeFoldersWrapped = args.IgnoreFoldersWithName.Select(folderName => "\\" + folderName + "\\").ToList();
             foreach (var item in codeFoldersWrapped)
-                CA.RemoveWhichContains(list, item, false, null);
+                CA.RemoveWhichContains(resultList, item, false, null);
         }
-        
-        if (e.excludeFromLocationsCOntains != null)
+
+        if (args.excludeFromLocationsCOntains != null)
             // I want to find files recursively
-            foreach (var item in e.excludeFromLocationsCOntains)
-                CA.RemoveWhichContains(list, item, e.wildcard, Regex.IsMatch);
-        return list;
+            foreach (var item in args.excludeFromLocationsCOntains)
+                CA.RemoveWhichContains(resultList, item, args.wildcard, Regex.IsMatch);
+        return resultList;
     }
 }
