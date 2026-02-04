@@ -45,9 +45,9 @@ internal partial class JunctionPoint
             EFileShare.Read | EFileShare.Write | EFileShare.Delete,
             nint.Zero, ECreationDisposition.OpenExisting,
             EFileAttributes.BackupSemantics | EFileAttributes.OpenReparsePoint, nint.Zero), true);
-        var err = Marshal.GetLastWin32Error();
-        if (err != 0)
-            if (ThrowLastWin32Error(logger, err, "UnableToOpenReparsePoint"))
+        var errorCode = Marshal.GetLastWin32Error();
+        if (errorCode != 0)
+            if (ThrowLastWin32Error(logger, errorCode, "UnableToOpenReparsePoint"))
             {
                 return null;
             }
@@ -86,10 +86,10 @@ internal partial class JunctionPoint
                 nint.Zero, 0, outBuffer, outBufferSize, out bytesReturned, nint.Zero);
             if (!result)
             {
-                var error = Marshal.GetLastWin32Error();
-                if (error == ERROR_NOT_A_REPARSE_POINT)
+                var errorCode = Marshal.GetLastWin32Error();
+                if (errorCode == ERROR_NOT_A_REPARSE_POINT)
                     return null;
-                if (ThrowLastWin32Error(logger, error, "UnableToGetInformationAboutJunctionPoint"))
+                if (ThrowLastWin32Error(logger, errorCode, "UnableToGetInformationAboutJunctionPoint"))
                 {
                     return null;
                 }
@@ -98,11 +98,11 @@ internal partial class JunctionPoint
                 Marshal.PtrToStructure<REPARSE_DATA_BUFFER>(outBuffer);
             if (reparseDataBuffer.ReparseTag != IO_REPARSE_TAG_MOUNT_POINT)
                 return null;
-            var targetDir = Encoding.Unicode.GetString(reparseDataBuffer.PathBuffer,
+            var targetDirectory = Encoding.Unicode.GetString(reparseDataBuffer.PathBuffer,
                 reparseDataBuffer.SubstituteNameOffset, reparseDataBuffer.SubstituteNameLength);
-            if (targetDir.StartsWith(NonInterpretedPathPrefix))
-                targetDir = targetDir.Substring(NonInterpretedPathPrefix.Length);
-            return targetDir;
+            if (targetDirectory.StartsWith(NonInterpretedPathPrefix))
+                targetDirectory = targetDirectory.Substring(NonInterpretedPathPrefix.Length);
+            return targetDirectory;
         }
         finally
         {

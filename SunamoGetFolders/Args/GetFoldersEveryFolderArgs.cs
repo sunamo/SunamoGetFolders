@@ -8,17 +8,17 @@ public class GetFoldersEveryFolderArgs
     /// <summary>
     /// Gets or sets whether to trim the base folder path and leading backslashes from results
     /// </summary>
-    public bool _trimA1AndLeadingBs { get; set; } = false;
+    public bool TrimA1AndLeadingBs { get; set; } = false;
 
     /// <summary>
     /// Gets or sets the predicate function to determine if a path is a junction point
     /// </summary>
-    public Func<string, bool>? dIsJunctionPoint { get; set; } = null;
+    public Func<string, bool>? IsJunctionPoint { get; set; } = null;
 
     /// <summary>
     /// Gets or sets whether to follow junction points during folder traversal
     /// </summary>
-    public bool followJunctions { get; set; } = false;
+    public bool FollowJunctions { get; set; } = false;
 
     /// <summary>
     /// Gets or sets the interval in seconds for logging progress (-1 disables progress logging)
@@ -28,27 +28,27 @@ public class GetFoldersEveryFolderArgs
     /// <summary>
     /// Gets or sets whether to trim file extensions from results
     /// </summary>
-    public bool _trimExt { get; set; } = false;
+    public bool TrimExt { get; set; } = false;
 
     /// <summary>
     /// Gets or sets whether to sort results by last modified date in ascending order
     /// </summary>
-    public bool byDateOfLastModifiedAsc { get; set; } = false;
+    public bool ByDateOfLastModifiedAsc { get; set; } = false;
 
     /// <summary>
     /// Gets or sets whether to exclude the newest item from results
     /// </summary>
-    public bool dontIncludeNewest { get; set; } = false;
+    public bool DontIncludeNewest { get; set; } = false;
 
     /// <summary>
     /// Gets or sets the list of path substrings to exclude from results
     /// </summary>
-    public List<string> excludeFromLocationsCOntains { get; set; } = new();
+    public List<string> ExcludeFromLocationsContains { get; set; } = new();
 
     /// <summary>
     /// Gets or sets the custom method for excluding items from results
     /// </summary>
-    public Action<List<string>>? excludeWithMethod { get; set; } = null;
+    public Action<List<string>>? ExcludeWithMethod { get; set; } = null;
 
     /// <summary>
     /// Gets or sets the function to get last modified date from a file path
@@ -58,22 +58,22 @@ public class GetFoldersEveryFolderArgs
     /// <summary>
     /// Gets or sets whether to throw exceptions on errors
     /// </summary>
-    public bool throwEx { get; set; } = false;
+    public bool ThrowEx { get; set; } = false;
 
     /// <summary>
     /// Gets or sets whether to use search pattern from file extension
     /// </summary>
-    public bool useMascFromExtension { get; set; } = false;
+    public bool UseMascFromExtension { get; set; } = false;
 
     /// <summary>
     /// Gets or sets whether to use wildcard matching for exclusions
     /// </summary>
-    public bool wildcard { get; set; } = false;
+    public bool Wildcard { get; set; } = false;
 
     /// <summary>
     /// Gets or sets whether to write debug output for every loaded folder
     /// </summary>
-    public bool writeToDebugEveryLoadedFolder { get; set; } = false;
+    public bool WriteToDebugEveryLoadedFolder { get; set; } = false;
 
     /// <summary>
     /// Gets or sets the list of folder names to ignore during traversal

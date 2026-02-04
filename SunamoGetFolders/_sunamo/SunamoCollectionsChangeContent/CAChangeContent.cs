@@ -11,8 +11,8 @@ internal class CAChangeContent
     {
         if (args != null)
         {
-            if (args.removeNull) list.Remove(null!);
-            if (args.removeEmpty)
+            if (args.RemoveNull) list.Remove(null!);
+            if (args.RemoveEmpty)
                 for (var i = list.Count - 1; i >= 0; i--)
                     if (list[i].Trim() == string.Empty)
                         list.RemoveAt(i);

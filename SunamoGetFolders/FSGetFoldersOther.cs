@@ -8,18 +8,18 @@ partial class FSGetFolders
     /// <param name="logger">Logger instance for logging operations</param>
     /// <param name="folderPath">The folder path to search</param>
     /// <param name="searchPattern">The file search pattern (e.g., "*.txt")</param>
-    /// <param name="topDirectoryOnly">Search option for top directory only or all directories</param>
+    /// <param name="searchOption">Search option for top directory only or all directories</param>
     /// <returns>List of folder paths that contain matching files</returns>
-    public static List<string> GetFoldersEveryFolderWhichContainsFiles(ILogger logger, string folderPath, string searchPattern, SearchOption topDirectoryOnly)
+    public static List<string> GetFoldersEveryFolderWhichContainsFiles(ILogger logger, string folderPath, string searchPattern, SearchOption searchOption)
     {
-        var folders = GetFoldersEveryFolder(logger, folderPath, "*", topDirectoryOnly, new GetFoldersEveryFolderArgs { _trimA1AndLeadingBs = false });
+        var folders = GetFoldersEveryFolder(logger, folderPath, "*", searchOption, new GetFoldersEveryFolderArgs { TrimA1AndLeadingBs = false });
         var result = new List<string>();
         foreach (var item in folders)
         {
-            var files = Directory.GetFiles(item, searchPattern, topDirectoryOnly).ToList();
+            var files = Directory.GetFiles(item, searchPattern, searchOption).ToList();
             if (files.Count != 0) result.Add(item);
         }
-        result = result.ConvertAll(folderPath => folderPath + "\\");
+        result = result.ConvertAll(path => path + "\\");
         return result;
     }
 
@@ -67,11 +67,11 @@ partial class FSGetFolders
         }
         catch (Exception ex)
         {
-            if (args != null && args.throwEx) ThrowEx.Custom(ex);
+            if (args != null && args.ThrowEx) ThrowEx.Custom(ex);
         }
         if (folders != null && args != null)
         {
-            CA.RemoveWhichContainsList(folders, args.excludeFromLocationsCOntains, args.wildcard);
+            CA.RemoveWhichContainsList(folders, args.ExcludeFromLocationsContains, args.Wildcard);
 
             // Track which folders should be excluded from traversal
             var foldersToExcludeFromTraversal = new HashSet<string>();

@@ -30,22 +30,22 @@ public partial class FSGetFolders
                 if (!searchPattern.WildcardMatch(folderName)) resultList.RemoveAt(i);
             }
 
-        if (args._trimA1AndLeadingBs)
+        if (args.TrimA1AndLeadingBs)
             for (var i = 0; i < resultList.Count; i++)
                 resultList[i] = resultList[i].Replace(folderPath, "").TrimStart('\\');
 
         // Only remove folders from results if IncludeExcludedFoldersWithoutTraversing is false
         if (!args.IncludeExcludedFoldersWithoutTraversing)
         {
-            List<string> codeFoldersWrapped = args.IgnoreFoldersWithName.Select(folderName => "\\" + folderName + "\\").ToList();
-            foreach (var item in codeFoldersWrapped)
+            List<string> ignoredFoldersWrapped = args.IgnoreFoldersWithName.Select(folderName => "\\" + folderName + "\\").ToList();
+            foreach (var item in ignoredFoldersWrapped)
                 CA.RemoveWhichContains(resultList, item, false, null);
         }
 
-        if (args.excludeFromLocationsCOntains != null)
+        if (args.ExcludeFromLocationsContains != null)
             // I want to find files recursively
-            foreach (var item in args.excludeFromLocationsCOntains)
-                CA.RemoveWhichContains(resultList, item, args.wildcard, Regex.IsMatch);
+            foreach (var item in args.ExcludeFromLocationsContains)
+                CA.RemoveWhichContains(resultList, item, args.Wildcard, Regex.IsMatch);
         return resultList;
     }
 }

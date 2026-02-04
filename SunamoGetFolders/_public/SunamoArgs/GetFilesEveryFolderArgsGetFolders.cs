@@ -3,7 +3,7 @@ namespace SunamoGetFolders._public.SunamoArgs;
 /// <summary>
 /// Arguments for getting files from every folder
 /// </summary>
-public class GetFilesEveryFolderArgsGetFolders : GetFilesBaseArgsGetFolders
+public class GetFilesEveryFolderArgsGetFolders
 {
     /// <summary>
     /// Gets or sets the action to execute when done
@@ -28,7 +28,7 @@ public class GetFilesEveryFolderArgsGetFolders : GetFilesBaseArgsGetFolders
     /// <summary>
     /// Gets or sets the maximum number of files before returning null (-1 for unlimited)
     /// </summary>
-    public int getNullIfThereIsMoreThanXFiles { get; set; } = -1;
+    public int GetNullIfThereIsMoreThanXFiles { get; set; } = -1;
 
     /// <summary>
     /// Gets or sets the action to update progress bar value
@@ -48,10 +48,10 @@ public class GetFilesEveryFolderArgsGetFolders : GetFilesBaseArgsGetFolders
     /// <summary>
     /// Gets or sets whether to use progress bar
     /// </summary>
-    public bool usePb { get; set; } = false;
+    public bool UsePb { get; set; } = false;
 
     /// <summary>
     /// Gets or sets whether to use progress bar time tracking
     /// </summary>
-    public bool usePbTime { get; set; } = false;
+    public bool UsePbTime { get; set; } = false;
 }

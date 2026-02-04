@@ -47,12 +47,12 @@ internal sealed partial class Exceptions
         var stackTraceText = stackTrace.ToString();
         var lines = stackTraceText.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
         lines.RemoveAt(0);
-        var i = 0;
+        var currentIndex = 0;
         string typeName = string.Empty;
         string methodName = string.Empty;
-        for (; i < lines.Count; i++)
+        for (; currentIndex < lines.Count; currentIndex++)
         {
-            var item = lines[i];
+            var item = lines[currentIndex];
             if (isFillAlsoFirstTwo)
                 if (!item.StartsWith("   at ThrowEx"))
                 {
