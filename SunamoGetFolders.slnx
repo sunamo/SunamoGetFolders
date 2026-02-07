@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="SunamoGetFolders.Tests\\SunamoGetFolders.Tests.csproj" />
+  <Project Path="RunnerGetFolders\\RunnerGetFolders.csproj" />
+  <Project Path="SunamoGetFolders\SunamoGetFolders.csproj" />
+</Solution>
