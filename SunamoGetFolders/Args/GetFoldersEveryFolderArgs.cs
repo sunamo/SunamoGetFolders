@@ -70,6 +70,7 @@ public class GetFoldersEveryFolderArgs
     /// </summary>
     public bool Wildcard { get; set; } = false;
 
+
     /// <summary>
     /// Gets or sets whether to write debug output for every loaded folder
     /// </summary>
