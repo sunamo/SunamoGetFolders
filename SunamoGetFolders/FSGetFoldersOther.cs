@@ -34,9 +34,10 @@ partial class FSGetFolders
     {
         var folders = GetFoldersEveryFolder(logger, folderPath);
         for (var i = 0; i < folders.Count; i++) folders[i] = folders[i].TrimEnd('\\');
-        for (var i = folders.Count - 1; i >= 0; i--)
-            if (!Regex.IsMatch(Path.GetFileName(folders[i]), regexPattern))
-                folders.RemoveAt(i);
+        if (regexPattern != "*")
+            for (var i = folders.Count - 1; i >= 0; i--)
+                if (!Regex.IsMatch(Path.GetFileName(folders[i]), regexPattern))
+                    folders.RemoveAt(i);
         return folders;
     }
     /// <summary>
