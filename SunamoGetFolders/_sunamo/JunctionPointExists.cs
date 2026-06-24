@@ -2,26 +2,13 @@ namespace SunamoGetFolders._sunamo;
 
 internal partial class JunctionPoint
 {
-    /// <summary>
-    ///     Command to get the reparse point data block.
-    /// </summary>
+    // Command to get the reparse point data block.
     protected const int FSCTL_GET_REPARSE_POINT = 0x000900A8;
-    /// <summary>
-    ///     The file or directory is not a reparse point.
-    /// </summary>
+    // The file or directory is not a reparse point.
     protected const int ERROR_NOT_A_REPARSE_POINT = 4390;
-    /// <summary>
-    ///     For normal folder and /H return false
-    ///     For junction true
-    ///     Determines whether the specified path exists and refers to a junction point.
-    /// </summary>
-    /// <param name="logger">Logger instance for logging operations</param>
-    /// <param name="path">The junction point path</param>
-    /// <returns>True if the specified path represents a junction point</returns>
-    /// <exception cref="IOException">
-    ///     Thrown if the specified path is invalid
-    ///     or some other error occurs
-    /// </exception>
+    // For normal folder and /H return false
+    // For junction true
+    // Determines whether the specified path exists and refers to a junction point.
     internal static bool IsJunctionPoint(ILogger logger, string path)
     {
         if (!Directory.Exists(path))
@@ -32,19 +19,13 @@ internal partial class JunctionPoint
             return target != null;
         }
     }
-    /// <summary>
-    ///     Cant be use for H
-    /// </summary>
-    /// <param name="logger">Logger instance for logging operations</param>
-    /// <param name="reparsePoint">The reparse point path</param>
-    /// <param name="accessMode">The file access mode</param>
-    /// <returns>SafeFileHandle for the reparse point or null on error</returns>
+    // Cant be use for H
     protected static SafeFileHandle? OpenReparsePoint(ILogger logger, string reparsePoint, EFileAccess accessMode)
     {
         var reparsePointHandle = new SafeFileHandle(CreateFile(reparsePoint, accessMode,
             EFileShare.Read | EFileShare.Write | EFileShare.Delete,
-            nint.Zero, ECreationDisposition.OpenExisting,
-            EFileAttributes.BackupSemantics | EFileAttributes.OpenReparsePoint, nint.Zero), true);
+            0, ECreationDisposition.OpenExisting,
+            EFileAttributes.BackupSemantics | EFileAttributes.OpenReparsePoint, 0), true);
         var errorCode = Marshal.GetLastWin32Error();
         if (errorCode != 0)
             if (ThrowLastWin32Error(logger, errorCode, "UnableToOpenReparsePoint"))
@@ -67,13 +48,11 @@ internal partial class JunctionPoint
         nint InBuffer, int nInBufferSize,
         nint OutBuffer, int nOutBufferSize,
         out int pBytesReturned, nint lpOverlapped);
-    /// <summary>
-    ///     Reparse point tag used to identify mount points and junction points.
-    /// </summary>
+    // Reparse point tag used to identify mount points and junction points.
     protected const uint IO_REPARSE_TAG_MOUNT_POINT = 0xA0000003;
     protected static string? InternalGetTarget(ILogger logger, SafeFileHandle? handle)
     {
-        if (handle == null)
+        if (handle is null)
         {
             return null;
         }
@@ -81,9 +60,8 @@ internal partial class JunctionPoint
         var outBuffer = Marshal.AllocHGlobal(outBufferSize);
         try
         {
-            int bytesReturned;
             var result = DeviceIoControl(handle.DangerousGetHandle(), FSCTL_GET_REPARSE_POINT,
-                nint.Zero, 0, outBuffer, outBufferSize, out bytesReturned, nint.Zero);
+                0, 0, outBuffer, outBufferSize, out int bytesReturned, 0);
             if (!result)
             {
                 var errorCode = Marshal.GetLastWin32Error();
@@ -109,19 +87,10 @@ internal partial class JunctionPoint
             Marshal.FreeHGlobal(outBuffer);
         }
     }
-    /// <summary>
-    ///     \??\
-    ///     This prefix indicates to NTFS that the path is to be treated as a non-interpreted
-    ///     path in the virtual file system.
-    /// </summary>
+    // \??\
+    // This prefix indicates to NTFS that the path is to be treated as a non-interpreted
+    // path in the virtual file system.
     protected const string NonInterpretedPathPrefix = @"\??\";
-    /// <summary>
-    /// Handles Win32 errors when working with reparse points
-    /// </summary>
-    /// <param name="logger">Logger instance for logging errors</param>
-    /// <param name="errorCode">The Win32 error code</param>
-    /// <param name="message">Error message to log</param>
-    /// <returns>True if error should be ignored, false otherwise</returns>
     protected static bool ThrowLastWin32Error(ILogger logger, int errorCode, string message)
     {
         if (errorCode == 5)
@@ -190,42 +159,13 @@ internal partial class JunctionPoint
     [StructLayout(LayoutKind.Sequential)]
     protected struct REPARSE_DATA_BUFFER
     {
-        /// <summary>
-        ///     Reparse point tag. Must be a Microsoft reparse point tag.
-        /// </summary>
         internal uint ReparseTag;
-        /// <summary>
-        ///     Size, in bytes, of the data after the Reserved member. This can be calculated by:
-        ///     (4 * sizeof(ushort)) + SubstituteNameLength + PrintNameLength +
-        ///     (namesAreNullTerminated ? 2 * sizeof(char) : 0);
-        /// </summary>
         internal ushort ReparseDataLength;
-        /// <summary>
-        ///     Reserved; do not use.
-        /// </summary>
         internal ushort Reserved;
-        /// <summary>
-        ///     Offset, in bytes, of the substitute name string in the PathBuffer array.
-        /// </summary>
         internal ushort SubstituteNameOffset;
-        /// <summary>
-        ///     Length, in bytes, of the substitute name string. If this string is null-terminated,
-        ///     SubstituteNameLength does not include space for the null character.
-        /// </summary>
         internal ushort SubstituteNameLength;
-        /// <summary>
-        ///     Offset, in bytes, of the print name string in the PathBuffer array.
-        /// </summary>
         internal ushort PrintNameOffset;
-        /// <summary>
-        ///     Length, in bytes, of the print name string. If this string is null-terminated,
-        ///     PrintNameLength does not include space for the null character.
-        /// </summary>
         internal ushort PrintNameLength;
-        /// <summary>
-        ///     A buffer containing the unicode-encoded path string. The path string contains
-        ///     the substitute name string and print name string.
-        /// </summary>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 0x3FF0)]
         internal byte[] PathBuffer;
     }

@@ -1,26 +1,14 @@
 namespace SunamoGetFolders;
 
-/// <summary>
-/// Provides methods for getting folders from the file system
-/// </summary>
 public partial class FSGetFolders
 {
-    /// <summary>
-    /// Gets all folders in the specified directory with optional filtering
-    /// Only this interface signature can be used - other overloads wouldn't know which method to call when only logger is provided
-    /// </summary>
-    /// <param name="logger">Logger instance for logging operations</param>
-    /// <param name="folderPath">The folder path to search</param>
-    /// <param name="searchPattern">Search pattern for folder names (supports wildcards, default is "*")</param>
-    /// <param name="searchOption">Search option for top directory only or all directories</param>
-    /// <param name="args">Optional arguments for folder retrieval configuration</param>
-    /// <returns>List of folder paths matching the criteria</returns>
+    // Only this interface signature can be used - other overloads wouldn't know which method to call when only logger is provided
     public static List<string> GetFoldersEveryFolder(ILogger logger, string folderPath, string searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly, GetFoldersEveryFolderArgs? args = null)
     {
-        if (args == null) args = new GetFoldersEveryFolderArgs();
+        args ??= new GetFoldersEveryFolderArgs();
         var resultList = new List<string>();
 
-        DateTime lastLogTime = DateTime.Now;
+        var lastLogTime = DateTime.Now;
         GetFoldersEveryFolder(logger, folderPath, resultList, searchOption, ref lastLogTime, args);
 
         if (searchPattern != "*")
@@ -37,7 +25,7 @@ public partial class FSGetFolders
         // Only remove folders from results if IncludeExcludedFoldersWithoutTraversing is false
         if (!args.IncludeExcludedFoldersWithoutTraversing)
         {
-            List<string> ignoredFoldersWrapped = args.IgnoreFoldersWithName.Select(folderName => "\\" + folderName + "\\").ToList();
+            var ignoredFoldersWrapped = args.IgnoreFoldersWithName.Select(folderName => "\\" + folderName + "\\").ToList();
             foreach (var item in ignoredFoldersWrapped)
                 CA.RemoveWhichContains(resultList, item, false, null);
         }
