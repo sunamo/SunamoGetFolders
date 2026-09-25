@@ -43,8 +43,8 @@ internal partial class JunctionPoint
     {
         var reparsePointHandle = new SafeFileHandle(CreateFile(reparsePoint, accessMode,
             EFileShare.Read | EFileShare.Write | EFileShare.Delete,
-            nint.Zero, ECreationDisposition.OpenExisting,
-            EFileAttributes.BackupSemantics | EFileAttributes.OpenReparsePoint, nint.Zero), true);
+            0, ECreationDisposition.OpenExisting,
+            EFileAttributes.BackupSemantics | EFileAttributes.OpenReparsePoint, 0), true);
         var errorCode = Marshal.GetLastWin32Error();
         if (errorCode != 0)
             if (ThrowLastWin32Error(logger, errorCode, "UnableToOpenReparsePoint"))
@@ -73,7 +73,7 @@ internal partial class JunctionPoint
     protected const uint IO_REPARSE_TAG_MOUNT_POINT = 0xA0000003;
     protected static string? InternalGetTarget(ILogger logger, SafeFileHandle? handle)
     {
-        if (handle == null)
+        if (handle is null)
         {
             return null;
         }
@@ -81,9 +81,8 @@ internal partial class JunctionPoint
         var outBuffer = Marshal.AllocHGlobal(outBufferSize);
         try
         {
-            int bytesReturned;
             var result = DeviceIoControl(handle.DangerousGetHandle(), FSCTL_GET_REPARSE_POINT,
-                nint.Zero, 0, outBuffer, outBufferSize, out bytesReturned, nint.Zero);
+                0, 0, outBuffer, outBufferSize, out int bytesReturned, 0);
             if (!result)
             {
                 var errorCode = Marshal.GetLastWin32Error();

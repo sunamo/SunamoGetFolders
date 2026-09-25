@@ -23,7 +23,7 @@ internal class SH
             return text.ToUpper();
         }
 
-        string restOfText = text.Substring(1);
+        var restOfText = text.Substring(1);
         return text[0].ToString().ToUpper() + restOfText;
     }
 }

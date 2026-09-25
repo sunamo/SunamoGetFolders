@@ -17,10 +17,10 @@ public partial class FSGetFolders
     /// <returns>List of folder paths matching the criteria</returns>
     public static List<string> GetFoldersEveryFolder(ILogger logger, string folderPath, string searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly, GetFoldersEveryFolderArgs? args = null)
     {
-        if (args == null) args = new GetFoldersEveryFolderArgs();
+        args ??= new GetFoldersEveryFolderArgs();
         var resultList = new List<string>();
 
-        DateTime lastLogTime = DateTime.Now;
+        var lastLogTime = DateTime.Now;
         GetFoldersEveryFolder(logger, folderPath, resultList, searchOption, ref lastLogTime, args);
 
         if (searchPattern != "*")
@@ -37,7 +37,7 @@ public partial class FSGetFolders
         // Only remove folders from results if IncludeExcludedFoldersWithoutTraversing is false
         if (!args.IncludeExcludedFoldersWithoutTraversing)
         {
-            List<string> ignoredFoldersWrapped = args.IgnoreFoldersWithName.Select(folderName => "\\" + folderName + "\\").ToList();
+            var ignoredFoldersWrapped = args.IgnoreFoldersWithName.Select(folderName => "\\" + folderName + "\\").ToList();
             foreach (var item in ignoredFoldersWrapped)
                 CA.RemoveWhichContains(resultList, item, false, null);
         }
