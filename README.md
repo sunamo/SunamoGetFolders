@@ -1,5 +1,10 @@
 # SunamoGetFolders
 
+## Short description
+
+Knihovna pro získávání složek s automatickým zachycením výjimek a následným zpracováním výsledku. Podporuje rekurzivní procházení a filtrování. Součástí je Runner a testy.
+
+
 Retrieving folders with automatic exception catching and further processing after
 
 ## Overview
