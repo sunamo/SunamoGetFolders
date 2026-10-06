@@ -2,14 +2,6 @@ namespace SunamoGetFolders;
 
 partial class FSGetFolders
 {
-    /// <summary>
-    /// Gets all folders that contain files matching the specified pattern
-    /// </summary>
-    /// <param name="logger">Logger instance for logging operations</param>
-    /// <param name="folderPath">The folder path to search</param>
-    /// <param name="searchPattern">The file search pattern (e.g., "*.txt")</param>
-    /// <param name="searchOption">Search option for top directory only or all directories</param>
-    /// <returns>List of folder paths that contain matching files</returns>
     public static List<string> GetFoldersEveryFolderWhichContainsFiles(ILogger logger, string folderPath, string searchPattern, SearchOption searchOption)
     {
         var folders = GetFoldersEveryFolder(logger, folderPath, "*", searchOption, new GetFoldersEveryFolderArgs { TrimA1AndLeadingBs = false });
@@ -23,13 +15,6 @@ partial class FSGetFolders
         return result;
     }
 
-    /// <summary>
-    /// Gets all folders that match the specified regex pattern
-    /// </summary>
-    /// <param name="logger">Logger instance for logging operations</param>
-    /// <param name="folderPath">The folder path to search</param>
-    /// <param name="regexPattern">Regular expression pattern to match folder names</param>
-    /// <returns>List of folder paths matching the pattern</returns>
     public static List<string> GetFoldersEveryFolder(ILogger logger, string folderPath, string regexPattern)
     {
         var folders = GetFoldersEveryFolder(logger, folderPath);
@@ -40,15 +25,6 @@ partial class FSGetFolders
                     folders.RemoveAt(i);
         return folders;
     }
-    /// <summary>
-    /// Recursively gets all folders in the specified directory
-    /// </summary>
-    /// <param name="logger">Logger instance for logging operations</param>
-    /// <param name="folderPath">The folder path to search</param>
-    /// <param name="resultList">List to store found folder paths</param>
-    /// <param name="searchOption">Search option for top directory only or all directories</param>
-    /// <param name="lastLogTime">Reference to last log time for progress tracking</param>
-    /// <param name="args">Optional arguments for folder retrieval configuration</param>
     private static void GetFoldersEveryFolder(ILogger logger, string folderPath, List<string> resultList, SearchOption searchOption, ref DateTime lastLogTime, GetFoldersEveryFolderArgs? args = null)
     {
         List<string>? folders = null;
