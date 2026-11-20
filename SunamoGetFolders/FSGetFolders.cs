@@ -1,8 +1,20 @@
 namespace SunamoGetFolders;
 
+/// <summary>
+/// Represents the FS get folders type.
+/// </summary>
 public partial class FSGetFolders
 {
     // Only this interface signature can be used - other overloads wouldn't know which method to call when only logger is provided
+    /// <summary>
+    /// Get folders every folder.
+    /// </summary>
+    /// <param name="logger">The logger.</param>
+    /// <param name="folderPath">The folder path.</param>
+    /// <param name="searchPattern">The search pattern.</param>
+    /// <param name="searchOption">The search option.</param>
+    /// <param name="args">The args.</param>
+    /// <returns>The get folders every folder result.</returns>
     public static List<string> GetFoldersEveryFolder(ILogger logger, string folderPath, string searchPattern = "*", SearchOption searchOption = SearchOption.TopDirectoryOnly, GetFoldersEveryFolderArgs? args = null)
     {
         args ??= new GetFoldersEveryFolderArgs();

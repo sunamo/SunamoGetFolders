@@ -2,6 +2,14 @@ namespace SunamoGetFolders;
 
 partial class FSGetFolders
 {
+    /// <summary>
+    /// Get folders every folder which contains files.
+    /// </summary>
+    /// <param name="logger">The logger.</param>
+    /// <param name="folderPath">The folder path.</param>
+    /// <param name="searchPattern">The search pattern.</param>
+    /// <param name="searchOption">The search option.</param>
+    /// <returns>The get folders every folder which contains files result.</returns>
     public static List<string> GetFoldersEveryFolderWhichContainsFiles(ILogger logger, string folderPath, string searchPattern, SearchOption searchOption)
     {
         var folders = GetFoldersEveryFolder(logger, folderPath, "*", searchOption, new GetFoldersEveryFolderArgs { TrimA1AndLeadingBs = false });
@@ -15,6 +23,13 @@ partial class FSGetFolders
         return result;
     }
 
+    /// <summary>
+    /// Get folders every folder.
+    /// </summary>
+    /// <param name="logger">The logger.</param>
+    /// <param name="folderPath">The folder path.</param>
+    /// <param name="regexPattern">The regex pattern.</param>
+    /// <returns>The get folders every folder result.</returns>
     public static List<string> GetFoldersEveryFolder(ILogger logger, string folderPath, string regexPattern)
     {
         var folders = GetFoldersEveryFolder(logger, folderPath);
