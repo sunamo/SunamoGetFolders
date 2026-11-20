@@ -1,4 +1,3 @@
-// variables names: ok
 using SunamoGetFolders.Tests;
 
 namespace RunnerGetFolders;

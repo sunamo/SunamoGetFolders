@@ -1,4 +1,3 @@
-// variables names: ok
 namespace SunamoGetFolders.Tests;
 
 using Microsoft.Extensions.Logging;
