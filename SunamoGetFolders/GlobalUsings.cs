@@ -4,7 +4,6 @@ global using System.Collections;
 global using System.Collections.Generic;
 global using System;
 global using SunamoGetFolders.Args;
-global using SunamoGetFolders._public.SunamoArgs;
 global using SunamoGetFolders._sunamo.SunamoArgs;
 global using SunamoGetFolders._sunamo.SunamoCollectionsChangeContent;
 global using SunamoGetFolders._sunamo.SunamoExceptions;
